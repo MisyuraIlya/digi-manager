@@ -2,8 +2,8 @@ import { alpha, createTheme, lighten, darken } from "@mui/material"
 import { red } from "@mui/material/colors"
 
 export const themeColors = {
-    primary: "#0f1621",
-    secondary: "#c83e3b",
+    primary: "#31312b",
+    secondary: "#ffffff",
     success: "#57CA22",
     warning: "#FFA319",
     error: "#E32D2D",
@@ -136,27 +136,6 @@ const theme = createTheme({
     direction: "rtl",
     typography: {
         fontFamily: "Ploni, Arial",
-        body1: {
-            color: "white",
-        },
-        h6: {
-            color: "white",
-        },
-        h5: {
-            color: "white",
-        },
-        h4: {
-            color: "white",
-        },
-        h3: {
-            color: "white",
-        },
-        h2: {
-            color: "white",
-        },
-        h1: {
-            color: "white",
-        }
     },
     palette: {
         background: {
