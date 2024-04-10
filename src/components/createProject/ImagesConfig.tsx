@@ -19,15 +19,15 @@ const ImagesConfig = () => {
                     Where images located ?
                 </Typography>
                 <ToggleButtonGroup
-                sx={{marginTop:'10px'}}
-                color="primary"
-                value={alignment}
-                exclusive
-                onChange={handleChange}
-                aria-label="Platform"
-                >
-                <ToggleButton value="api">In Api</ToggleButton>
-                <ToggleButton value="ftp">FTP Folder</ToggleButton>
+                    sx={{marginTop:'10px'}}
+                    color="primary"
+                    value={alignment}
+                    exclusive
+                    onChange={handleChange}
+                    aria-label="Platform"
+                    >
+                    <ToggleButton value="api">In Api</ToggleButton>
+                    <ToggleButton value="ftp">FTP Folder</ToggleButton>
                 </ToggleButtonGroup>
                 {alignment == 'ftp' && 
                     <Box>
