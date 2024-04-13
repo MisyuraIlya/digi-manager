@@ -3,6 +3,7 @@ import { Box, Button, FormControl, InputLabel, LinearProgress, MenuItem, Select,
 import React, { useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+import { ApiCheckerService } from '../../services/apiChecker.services';
 
 const erps = [
     {
@@ -89,13 +90,15 @@ interface IEndPoint {
 const ApiValidation = () => {
     const [erp, setErp] = React.useState('');
     const [endpoints, setEndpoints] = useState<IEndPoint[]>()
+    const [show, setShow] = useState(false)
 
-    const handleCheck = () => {
+    const handleCheck = async () => {
+        setShow(true)
         if (endpoints) {
             for (let i = 0; i < endpoints.length; i++) {
-                const random = Math.random() < 0.5;
+                const result = await ApiCheckerService.checkUrl(endpoints[i].path,'dataportal','54362')
                 const updatedEndpoints = [...endpoints];
-                updatedEndpoints[i].status = random ? 'success' : 'error';
+                updatedEndpoints[i].status = result.result === 'success' ? 'success' : 'error';
                 setEndpoints(updatedEndpoints);
             }
         }
@@ -133,7 +136,7 @@ const ApiValidation = () => {
                         },
                     }}
                 >
-                {endpoints?.map((item,index) =>
+                {show && endpoints?.map((item,index) =>
                     <TimelineItem key={index} sx={{display:'flex', justifyContent:'left'}}>
                         <TimelineSeparator sx={{width:'10px'}}>
                             {item?.status == 'null' &&

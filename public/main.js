@@ -2,7 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 const { getLocalIps } = require('./handlers/core');
-const { NativeDirectories } = require('./handlers/directories')
+const { NativeDirectories } = require('./handlers/directories');
+const { ApiCheckService } = require('./handlers/apiChecker');
 const isDev =  !app.isPackaged
 
 const createWindow = () => {
@@ -47,3 +48,4 @@ ipcMain.on('getInitialDirectory', NativeDirectories.getInitialDirectory);
 ipcMain.on('getDirectoryContents', NativeDirectories.getDirectoryContents);
 ipcMain.on('goToParentDirectory', NativeDirectories.goToParentDirectory);
 ipcMain.on('openDirectory', NativeDirectories.openDirectory);
+ipcMain.on('apiCheck:checkUrl:send', ApiCheckService.checkApiEndpoint);

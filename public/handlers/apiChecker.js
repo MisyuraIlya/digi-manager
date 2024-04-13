@@ -1,22 +1,27 @@
-const fs = require('fs');
-const pathModule = require('path');
-const { app, BrowserWindow, dialog } = require('electron');
+const axios = require('axios');
 
-const formatSize = size => {
-    var i = Math.floor(Math.log(size) / Math.log(1024));
-    return (
-      (size / Math.pow(1024, i)).toFixed(2) * 1 +
-      ' ' +
-      ['B', 'kB', 'MB', 'GB', 'TB'][i]
-    );
+const ApiCheckService = {
+    async checkApiEndpoint(event, data) {
+        const json = data;
+        try {
+            const response = await axios.get(json.url, {
+                auth: {
+                    username: json.username,
+                    password: json.password
+                }
+            });
+            if (response.status === 200) {
+                console.log('API endpoint is reachable and returns status 200');
+                event.sender.send('apiCheck:checkUrl:response', { result: 'success' });
+            } else {
+                console.error('API endpoint is reachable but returns status', response.status);
+                event.sender.send('apiCheck:checkUrl:response', { result: 'error', message: `Unexpected status code: ${response.status}` });
+            }
+        } catch (error) {
+            console.error('Error occurred while checking API endpoint:', error.message);
+            event.sender.send('apiCheck:checkUrl:response', { result: 'error', message: error.message });
+        }
+    },
 };
 
-const NativeDirectories = {
-    async checkApiEndpoint(event,data){
-        event.sender.send('initialDirectoryData', { path: app.getAppPath() });
-    },
-
-}
-
-
-module.exports = { NativeDirectories };
+module.exports = { ApiCheckService };
