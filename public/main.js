@@ -4,6 +4,7 @@ const url = require('url');
 const { getLocalIps } = require('./handlers/core');
 const { NativeDirectories } = require('./handlers/directories');
 const { ApiCheckService } = require('./handlers/apiChecker');
+const { FtpService } = require('./handlers/ftpService');
 const isDev =  !app.isPackaged
 
 const createWindow = () => {
@@ -49,3 +50,4 @@ ipcMain.on('getDirectoryContents', NativeDirectories.getDirectoryContents);
 ipcMain.on('goToParentDirectory', NativeDirectories.goToParentDirectory);
 ipcMain.on('openDirectory', NativeDirectories.openDirectory);
 ipcMain.on('apiCheck:checkUrl:send', ApiCheckService.checkApiEndpoint);
+ipcMain.on('FtpService:ftpCheck:send', FtpService.ftpCheck);

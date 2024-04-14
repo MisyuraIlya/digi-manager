@@ -1,9 +1,12 @@
-import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { FtpService } from '../../services/ftpService';
 
 const ImagesConfig = () => {
     const [alignment, setAlignment] = React.useState('');
-
+    const [host, setHost] = useState('');
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
@@ -11,27 +14,39 @@ const ImagesConfig = () => {
         setAlignment(newAlignment);
     };
 
+    const handleCheck = async () => {
+        const response = await FtpService.checkFtp(host,username,password)
+        console.log('response',response)
+    }
+
 
     return (
         <Box sx={{display:'flex', justifyContent:'center', marginTop:'40px'}}>
             <Box>
-                <Typography>
+                <Typography sx={{textAlign:'center', padding:'10px'}}>
                     Where images located ?
                 </Typography>
-                <ToggleButtonGroup
-                    sx={{marginTop:'10px'}}
-                    color="primary"
-                    value={alignment}
-                    exclusive
-                    onChange={handleChange}
-                    aria-label="Platform"
-                    >
-                    <ToggleButton value="api">In Api</ToggleButton>
-                    <ToggleButton value="ftp">FTP Folder</ToggleButton>
-                </ToggleButtonGroup>
+                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', padding:'10px'}}>
+                    <ToggleButtonGroup
+                        sx={{marginTop:'10px'}}
+                        color="primary"
+                        value={alignment}
+                        exclusive
+                        onChange={handleChange}
+                        aria-label="Platform"
+                        >
+                        <ToggleButton value="api">In Api</ToggleButton>
+                        <ToggleButton value="ftp">FTP Folder</ToggleButton>
+                    </ToggleButtonGroup>
+                </Box>
                 {alignment == 'ftp' && 
-                    <Box>
-                        FTP
+                    <Box sx={{display:'flex', gap:'20px', alignItems:'center', justifyContent:'center', padding:'10px'}}>
+                        <TextField value={host} onChange={(e) => setHost(e.target.value)} id="standard-basic" label="host" variant="standard" />
+                        <TextField value={username} onChange={(e) => setUsername(e.target.value)} id="standard-basic" label="username" variant="standard" />
+                        <TextField value={password} onChange={(e) => setPassword(e.target.value)} id="standard-basic" label="password" variant="standard" />
+                        <Button variant='contained' sx={{mt:'12px'}} onClick={() => handleCheck()}>
+                            Check
+                        </Button>
                     </Box>
                 }
             </Box>

@@ -1,17 +1,17 @@
 const ipcRenderer = (window as any).ipcRenderer;
 
-export const ApiCheckerService = {
-    async checkUrl(url: string, username: string, password: string): Promise<{result: 'success' | 'error', message:string}> {
+export const FtpService = {
+    async checkFtp(host:string,usernmae:string,password:string){
         try {
             const result = await new Promise<{result: 'success' | 'error', message:string}>((resolve, reject) => {
-              ipcRenderer.on('apiCheck:checkUrl:response', (event:any, response:any) => {
+              ipcRenderer.on('FtpService:ftpCheck:response', (event:any, response:any) => {
                 resolve(response);
               });
                 ipcRenderer.send(
-                  'apiCheck:checkUrl:send',
+                  'FtpService:ftpCheck:send',
                   {
-                    url:`https://app1.medi-market.co.il:50081/odata/Priority/tabula.ini/medi/${url}?$top=1`,
-                    username:username,
+                    host:host,
+                    username:usernmae,
                     password:password
                   }
                 );
