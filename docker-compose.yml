@@ -1,0 +1,7 @@
+
+    version: '3'
+    services:
+      digi-backend:
+        image: spetsar/digi-backend
+        # Other configurations for this service, if needed
+    

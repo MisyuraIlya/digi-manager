@@ -10,7 +10,7 @@ export const ApiCheckerService = {
                 ipcRenderer.send(
                   'apiCheck:checkUrl:send',
                   {
-                    url:`https://app1.medi-market.co.il:50081/odata/Priority/tabula.ini/medi/${url}?$top=1`,
+                    url:url,
                     username:username,
                     password:password
                   }

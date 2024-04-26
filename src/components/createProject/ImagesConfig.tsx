@@ -1,12 +1,14 @@
-import { Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, IconButton, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { FtpService } from '../../services/ftpService';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const ImagesConfig = () => {
     const [alignment, setAlignment] = React.useState('');
     const [host, setHost] = useState('');
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
@@ -15,10 +17,35 @@ const ImagesConfig = () => {
     };
 
     const handleCheck = async () => {
-        const response = await FtpService.checkFtp(host,username,password)
-        console.log('response',response)
+        const response = await FtpService.checkFtp('192.168.1.30','ftpuser','123456')
     }
 
+
+
+
+
+
+
+    const [path, setPath]= useState('')
+    const [files, setFiles] = useState<IFile[]>([])
+
+ 
+
+    const contents = async () => {
+        const res = await FtpService.getDirectoryContents('192.168.1.30','ftpuser','123456',path)
+        console.log('contents',res)
+        // setFiles(res)
+     
+    }
+
+
+
+   
+
+
+    useEffect(() => {
+        contents()
+    },[path])
 
     return (
         <Box sx={{display:'flex', justifyContent:'center', marginTop:'40px'}}>
@@ -47,8 +74,16 @@ const ImagesConfig = () => {
                         <Button variant='contained' sx={{mt:'12px'}} onClick={() => handleCheck()}>
                             Check
                         </Button>
+                        <Box sx={{paddingTop:'13px'}}>
+                            <IconButton>
+                                <RemoveRedEyeIcon/>
+                            </IconButton>
+                        </Box>
                     </Box>
                 }
+                <Box>
+
+                </Box>
             </Box>
         </Box>
     );

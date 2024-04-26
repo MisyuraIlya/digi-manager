@@ -397,7 +397,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     "& .MuiOutlinedInput-root": {
-                        borderRadius: 12,
+                        borderRadius: 5,
                     },
                 },
             },
