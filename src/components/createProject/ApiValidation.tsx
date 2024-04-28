@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { ApiCheckerService } from '../../services/apiChecker.services';
-import { useWork } from '../../hooks/work.store';
+import { useWork } from '../../store/work.store';
 import { Controller, useForm } from 'react-hook-form';
 
 

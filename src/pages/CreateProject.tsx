@@ -4,7 +4,8 @@ import ApiValidation from '../components/createProject/ApiValidation';
 import Configuration from '../components/createProject/Configuration';
 import Deploy from '../components/createProject/Deploy';
 import ImagesConfig from '../components/createProject/ImagesConfig';
-import { useWork } from '../hooks/work.store';
+import { useWork } from '../store/work.store';
+import { ConfigService } from '../services/config.service';
 
 const steps = ['validation API', 'Images' ,'Configuration','Deploy Process' ];
 
@@ -13,7 +14,18 @@ const CreateProject = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const {endpoints,isDisabledLvl1} = useWork()
+  const {
+    endpoints,
+    isDisabledLvl1,
+
+
+    title,
+    minimumDelivery,
+    primaryColor,
+    secondaryColor,
+    imageState,
+
+  } = useWork()
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -22,8 +34,19 @@ const CreateProject = () => {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     let newSkipped = skipped;
+
+    if(activeStep === 2) {
+      await ConfigService.createConfig({
+        title,
+        minimumDelivery,
+        primaryColor,
+        secondaryColor,
+        imageState,
+      })
+    }
+
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);

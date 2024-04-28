@@ -6,6 +6,7 @@ const { NativeDirectories } = require('./handlers/directories');
 const { ApiCheckService } = require('./handlers/apiChecker');
 const { FtpService } = require('./handlers/ftpService');
 const { DockerService } = require('./handlers/dockerService');
+const { ConfigService } = require('./handlers/configService');
 
 const isDev =  !app.isPackaged
 
@@ -54,7 +55,5 @@ ipcMain.on('openDirectory', NativeDirectories.openDirectory);
 ipcMain.on('apiCheck:checkUrl:send', ApiCheckService.checkApiEndpoint);
 ipcMain.on('FtpService:ftpCheck:send', FtpService.ftpCheck);
 ipcMain.on('DockerService:deploy:send', DockerService.deploy);
-ipcMain.on('FtpService:getInitialDirectory:send', FtpService.getInitialDirectory);
-ipcMain.on('FtpService:goToParentDirectory:send', FtpService.goToParentDirectory);
-ipcMain.on('FtpService:openDirectory:send', FtpService.openDirectory);
 ipcMain.on('FtpService:getDirectoryContents:send', FtpService.getDirectoryContents);
+ipcMain.on('ConfigService:createConfig:send', ConfigService.createConfig);

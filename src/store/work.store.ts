@@ -14,8 +14,23 @@ interface useCartState {
     setPassword: (erp:string) => void
     db: string
     setDb: (erp:string) => void
+
+    //CONFIG
+    imageState: string
+    setImageState:(imageState: string) => void
+    title: string
+    setTitle: (value: string) => void
+    minimumDelivery: number
+    setMinimumDelivery: (value: number) => void
+    primaryColor: string
+    setPrimaryColor:(value:string) => void
+    secondaryColor: string
+    setSecondaryColor:(value:string) => void
+
     isDisabledLvl1: boolean
     setIsDisabledLvl1: (value: boolean) => void
+
+
 }
 
 
@@ -36,6 +51,17 @@ export const useWork = create(
       setPassword: (password) => set({password}),
       db:'',
       setDb: (db) => set({db}),
+      //CONFIG
+      imageState:'',
+      setImageState:(imageState) => set({imageState}),
+      title:'',
+      setTitle:(title) => set({title}),
+      minimumDelivery:0,
+      setMinimumDelivery: (minimumDelivery) => set({minimumDelivery}),
+      primaryColor:'',
+      setPrimaryColor: (primaryColor) => set({primaryColor}),
+      secondaryColor:'',
+      setSecondaryColor:(secondaryColor) => set({secondaryColor}),
 
       isDisabledLvl1:true,
       setIsDisabledLvl1:(isDisabledLvl1) => set({isDisabledLvl1})
