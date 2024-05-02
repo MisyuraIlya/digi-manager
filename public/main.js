@@ -57,3 +57,5 @@ ipcMain.on('FtpService:ftpCheck:send', FtpService.ftpCheck);
 ipcMain.on('DockerService:deploy:send', DockerService.deploy);
 ipcMain.on('FtpService:getDirectoryContents:send', FtpService.getDirectoryContents);
 ipcMain.on('ConfigService:createConfig:send', ConfigService.createConfig);
+ipcMain.on('ConfigService:createFiles:send', ConfigService.createFiles);
+ipcMain.on('DockerService:cloneRepository:send', DockerService.cloneRepository);

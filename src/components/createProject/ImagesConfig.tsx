@@ -2,12 +2,11 @@ import { Box, Button, IconButton, TextField, ToggleButton, ToggleButtonGroup, Ty
 import React, { useEffect, useState } from 'react';
 import { FtpService } from '../../services/ftpService';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { useWork } from '../../store/work.store';
 
 const ImagesConfig = () => {
     const [alignment, setAlignment] = React.useState('');
-    const [host, setHost] = useState('');
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const {host,setHost,usernameFtp,setUserNameFtp,passwordFtp,setPasswordFtp} = useWork()
 
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
@@ -20,28 +19,13 @@ const ImagesConfig = () => {
         const response = await FtpService.checkFtp('192.168.1.30','ftpuser','123456')
     }
 
-
-
-
-
-
-
     const [path, setPath]= useState('')
     const [files, setFiles] = useState<IFile[]>([])
 
- 
-
     const contents = async () => {
         const res = await FtpService.getDirectoryContents('192.168.1.30','ftpuser','123456',path)
-        console.log('contents',res)
-        // setFiles(res)
      
     }
-
-
-
-   
-
 
     useEffect(() => {
         contents()
@@ -69,8 +53,8 @@ const ImagesConfig = () => {
                 {alignment == 'ftp' && 
                     <Box sx={{display:'flex', gap:'20px', alignItems:'center', justifyContent:'center', padding:'10px'}}>
                         <TextField value={host} onChange={(e) => setHost(e.target.value)} id="standard-basic" label="host" variant="standard" />
-                        <TextField value={username} onChange={(e) => setUsername(e.target.value)} id="standard-basic" label="username" variant="standard" />
-                        <TextField value={password} onChange={(e) => setPassword(e.target.value)} id="standard-basic" label="password" variant="standard" />
+                        <TextField value={usernameFtp} onChange={(e) => setUserNameFtp(e.target.value)} id="standard-basic" label="username" variant="standard" />
+                        <TextField value={passwordFtp} onChange={(e) => setPasswordFtp(e.target.value)} id="standard-basic" label="password" variant="standard" />
                         <Button variant='contained' sx={{mt:'12px'}} onClick={() => handleCheck()}>
                             Check
                         </Button>

@@ -15,17 +15,21 @@ const CreateProject = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const {
-    endpoints,
     isDisabledLvl1,
-
-
-    title,
-    minimumDelivery,
-    primaryColor,
-    secondaryColor,
-    imageState,
-
+    isDisabledLvl3
   } = useWork()
+  
+  const checkIsDisabled = () => {
+    if(activeStep === 1) {
+      return isDisabledLvl1
+    }
+    if(activeStep === 2){
+      return isDisabledLvl3
+    }
+
+    return false
+  }
+
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -36,16 +40,6 @@ const CreateProject = () => {
 
   const handleNext = async () => {
     let newSkipped = skipped;
-
-    if(activeStep === 2) {
-      await ConfigService.createConfig({
-        title,
-        minimumDelivery,
-        primaryColor,
-        secondaryColor,
-        imageState,
-      })
-    }
 
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -62,8 +56,6 @@ const CreateProject = () => {
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
       throw new Error("You can't skip a step that isn't optional.");
     }
 
@@ -141,7 +133,7 @@ const CreateProject = () => {
                     Skip
                     </Button>
                 )}
-                <Button disabled={isDisabledLvl1} onClick={handleNext} variant='contained' color='secondary'>
+                <Button disabled={checkIsDisabled()} onClick={handleNext} variant='contained' color='secondary'>
                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
               </Box>

@@ -10,7 +10,6 @@ const Deploy = () => {
 
     const handleOpen = () => {
         setOpen(true);
-        DockerService.deploy()
     }
     useEffect(() => {
         const handleOutput = (event:any, response:IDockerResponse) => {
