@@ -21,15 +21,47 @@ function createFolder(folderPath) {
 
 function createJsonFile(folderPath, json) {
     return new Promise((resolve, reject) => {
-        const jsonData = JSON.stringify(json, null, 2);
-        const filePath = path.join(folderPath, 'config.json');
-        fs.writeFile(filePath, jsonData, 'utf8', (err) => {
+        const filePath = path.join(folderPath, 'global.js');
+        const globalJs = `
+        global.settings = {
+            "erp": "${json?.erp}",
+            "api":  "${json?.api}",
+            "username": "${json?.username}",
+            "password": "${json?.password}",
+            "host": "${json?.host}",
+            "usernameFtp": "${json?.usernameFtp}",
+            "passwordFtp": "${json?.passwordFtp}",
+            "db": "${json?.db}",
+            "imageState": "${json?.imageState}",
+            "title": "${json?.title}",
+            "isWithStock": "${json?.isWithStock}",
+            "isWithMigvan": "${json?.isWithMigvan}",
+            "oneSignalApi": "${json?.oneSignalApi}",
+            "smsApi": "${json?.smsApi}",
+            "smsToken": "${json?.smsToken}",
+        
+            "oneSignalKey": "${json?.oneSignalKey}",
+            "primaryColor": "${json?.primaryColor}",
+            "secondaryColor": "${json?.secondaryColor}",
+            "description": "${json?.description}",
+            "minimumPrice": "${json?.minimumPrice}",
+            "deliveryPrice": "${json?.deliveryPrice}",
+            "location": "${json?.location}",
+            "email": "${json?.email}",
+            "phone": "${json?.phone}" ,
+            "fax": "${json?.fax}" ,
+            "footerDescription1": "${json?.footerDescription1}",
+            "footerDescription2": "${json?.footerDescription2}",
+            "footerDescription3": "${json?.footerDescription3}"
+        }
+        `;
+        fs.writeFile(filePath, globalJs, (err) => {
             if (err) {
-                console.error('Error writing config.json file:', err);
-                resolve(false); 
+                console.error('Error writing .env file:', err);
+                resolve(false); // Resolve with false if there's an error
             } else {
-                console.log('config.json file has been created successfully in', filePath);
-                resolve(true); 
+                console.log('.env file has been created successfully in', filePath);
+                resolve(true); // Resolve with true if successful
             }
         });
     });
@@ -124,12 +156,56 @@ function createEnvFile(folderPath, data) {
     });
 }
 
+function mediaUploader(folderPath, base64, fileName) {
+    try {
+        // Validate the Base64 string
+        const matches = base64.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+        if (!matches) {
+            throw new Error('Invalid Base64 string');
+        }
+
+        const fileContents = Buffer.from(matches[2], 'base64');
+
+        // Ensure the folder exists
+        if (!fs.existsSync(folderPath)) {
+            fs.mkdirSync(folderPath, { recursive: true });
+        }
+
+        // Create the file path
+        const filePath = path.join(folderPath, fileName);
+
+        // Write the file
+        fs.writeFileSync(filePath, fileContents, 'binary');
+        console.log(`File saved to ${filePath}`);
+        return true;
+    } catch (error) {
+        console.error(`Error saving file: ${error.message}`);
+        return false;
+    }
+}
+
+function copyFileName(destinationFolderr,sourcee) {
+    const source = path.join(__dirname, 'setup.sh'); 
+    const destinationFolder = destinationFolderr;
+    fs.mkdirSync(destinationFolder, { recursive: true });
+    const destination = path.join(destinationFolder, 'setup.sh');
+    fs.copyFile(source, destination, (err) => {
+      if (err) {
+        console.error('Error copying file:', err);
+      } else {
+        console.log(`${source} was copied to ${destination}`);
+      }
+    });
+}
+
+
 const ConfigService = {
     async createConfig(event, data) {
         const json = data;
-        console.log('json',json)
         const folder = app.getPath('userData')  + '/' + json.title
+        console.log('folder',folder)
         const isCreated = await createFolder(folder)
+        console.log('isCreated',isCreated)
         if(isCreated){
             event.sender.send('ConfigService:createConfig:response', {result:"success", folderPath:folder,  message:""});
         } else {
@@ -139,16 +215,28 @@ const ConfigService = {
 
     async createFiles(event, data) {
         const json = data;
-        const jsonFilePath = json.folderPath + '/digiapp/client';
-        const envFilePath = json.folderPath + '/digiapp/app';
+        const jsonFilePath = json.folderPath;
+        const envFilePath = json.folderPath;
         const isCreatedJsonFile = await createJsonFile(jsonFilePath,json)
         const isCreatedEnvFile =  await createEnvFile(envFilePath,json)
+        const copySetupSh = await copyFileName(envFilePath,'setup.sh')
         if(isCreatedJsonFile && isCreatedEnvFile) {
             event.sender.send('ConfigService:createFiles:response', {result:"success",  message:""});
         } else {
             event.sender.send('ConfigService:createFiles:response', {result:"error", message:""});
         }
     },
+
+    async createMeida(event,data){
+        const json = data;
+        const folder = json.folderPath
+        const isCreated = await mediaUploader(folder , json.base64 , json.fileName)
+        if(isCreated){
+            event.sender.send('ConfigService:createMeida:response', {result:"success", folderPath:folder,  message:""});
+        } else {
+            event.sender.send('ConfigService:createMeida:response', {result:"error", folderPath:folder, message:""});
+        }
+    }
 };
 
 module.exports = { ConfigService };

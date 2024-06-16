@@ -21,9 +21,9 @@ interface IEndPoint {
 const ApiChecker = () => {
     const [open, setOpen] = useState(false)
     const [erp, setErp] = useState('');
-    const [apiUrl, setApiUrl] = useState('https://app1.medi-market.co.il:50081/odata/Priority/tabula.ini/medi');
-    const [username, setUsername] = useState('dataportal');
-    const [password, setPassword] = useState('54362');
+    const [apiUrl, setApiUrl] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [companyDB, setCompanyDB] = useState('');
     const [endpoints, setEndpoints] = useState<IEndPoint[]>()
     
@@ -91,7 +91,6 @@ const ApiChecker = () => {
     ]
 
     const handleCheckAllEndpoints = async () => {
-        console.log('here')
         setOpen(true)
         // if (!apiUrl || !username || !password) {
         //     console.error('Please fill in all required fields.');
@@ -101,14 +100,12 @@ const ApiChecker = () => {
         // try {
         //     const endpoints = erps.find(item => item.name === erp)?.endpoints || [];
         //     for (const endpoint of endpoints) {
-        //         console.log(`${apiUrl}${endpoint.path}`)
         //         const response = await axios.get(`${apiUrl}${endpoint.path}`, {
         //             auth: {
         //                 username: username,
         //                 password: password
         //             }
         //         });
-        //         console.log(`Endpoint '${endpoint.title}' is okay. Response:`, response.data);
         //     }
         // } catch (error) {
         //     console.error('Error checking endpoints:', error);

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage, PersistOptions } from 'zustand/middleware'
 import { ConfigService } from '../services/config.service'
 import { DockerService } from '../services/docker.services'
+import { base64 } from '../helpers/base64'
 
 interface useCartState {
     erp: string
@@ -61,13 +62,12 @@ interface useCartState {
     smsToken:string,
     setSmsToken: (smsToken: string) => void,
     
-
     isDisabledLvl1: boolean
     setIsDisabledLvl1: (value: boolean) => void
     isDisabledLvl3: boolean
     setIsDisabledLvl3: (value: boolean) => void
 
-    deployConfig: () => void
+    deployConfig: (file: File | null) => void
 
 }
 
@@ -134,7 +134,6 @@ export const useWork = create(
       smsToken:'',
       setSmsToken: (smsToken) => set({smsToken}),
 
-
       //AC
       isDisabledLvl1:true,
       setIsDisabledLvl1:(isDisabledLvl1) => set({isDisabledLvl1}),
@@ -142,7 +141,7 @@ export const useWork = create(
       setIsDisabledLvl3:(isDisabledLvl3) => set({isDisabledLvl3}),
 
       //METHODS
-      deployConfig: async () => {
+      deployConfig: async (file: File | null) => {
         const res = await ConfigService.createFolder({
           erp: get().erp,
           api: get().api,
@@ -171,10 +170,14 @@ export const useWork = create(
           smsApi: get().smsApi,
           smsToken: get().smsToken,
         })
-
-        if(res.result === 'success'){
-          const data = await DockerService.cloneRepository(res.folderPath)
-          if(data.result === 'success'){
+        if(res.result === "success"){
+            const logoBase64 = await base64(file)
+            const splited = file?.type?.split('/')[1]
+            const logo = await ConfigService.createMedia({
+              folderPath: res.folderPath,
+              base64: logoBase64,
+              fileName:`logo.${splited}`
+            })
             const files = await ConfigService.createFiles({
                 folderPath: res.folderPath,
                 erp: get().erp,
@@ -204,12 +207,7 @@ export const useWork = create(
                 smsApi: get().smsApi,
                 smsToken: get().smsToken,
             })
-          }
-          if(data.result === 'success'){
-            set({isDisabledLvl3:false})
-          } else {
-            set({isDisabledLvl3:true})
-          }
+            console.log('files',files)
         } else {
           set({isDisabledLvl3:true})
         }

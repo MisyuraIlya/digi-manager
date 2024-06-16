@@ -5,6 +5,7 @@ import ImageUploader from '../../utils/ImageUploader';
 import { themeColors } from '../../styles/mui';
 
 const Configuration = () => {
+
     const {
         imageState,
         setImageState,
@@ -41,8 +42,8 @@ const Configuration = () => {
         setSmsApi,
         smsToken,
         setSmsToken,
-        
     } = useWork()
+
     const [file, setFile] = useState<File | null>(null)
     return (
         <Box>
@@ -236,7 +237,7 @@ const Configuration = () => {
                         value={smsToken} 
                         onChange={(e) => setSmsToken(e.target.value)}
                     />
-                    <Button variant='contained' onClick={() => deployConfig()} sx={{position:'absolute', bottom:'5px', right:'25%', minWidth:'200px'}}>
+                    <Button variant='contained' onClick={() => deployConfig(file)} sx={{position:'absolute', bottom:'5px', right:'25%', minWidth:'200px'}}>
                         save options
                     </Button>
                 </Grid>

@@ -18,8 +18,16 @@ export const ConfigService = {
             });
             ipcRenderer.send('ConfigService:createFiles:send',{...obj});
         });
-        console.log('resultresult',result)
         return result
-     
+    },
+
+    async createMedia(obj: any):Promise<{result: 'success' | 'error', message:string}> {
+        const result = await new Promise<{result: 'success' | 'error', message:string}>((resolve, reject) => {
+            ipcRenderer.on('ConfigService:createMeida:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('ConfigService:createMeida:send',{...obj});
+        });
+        return result
     }
 }
