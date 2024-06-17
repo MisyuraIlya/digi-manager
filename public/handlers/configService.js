@@ -198,6 +198,62 @@ function copyFileName(destinationFolderr,sourcee) {
     });
 }
 
+function copyFolder(source, destination) {
+    // Check if source folder exists
+    if (!fs.existsSync(source)) {
+      throw new Error(`Source folder "${source}" does not exist.`);
+    }
+  
+    // Create the destination folder if it doesn't exist (asynchronous)
+    fs.mkdir(destination, { recursive: true }, (err) => {
+      if (err) {
+        throw new Error(`Error creating destination folder "${destination}": ${err.message}`);
+      }
+  
+      // Read contents of the source folder
+      fs.readdir(source, (err, files) => {
+        if (err) {
+          throw new Error(`Error reading source folder "${source}": ${err.message}`);
+        }
+  
+        for (const file of files) {
+          const sourcePath = path.join(source, file);
+          const destPath = path.join(destination, file);
+  
+          // Check if it's a file or a subfolder
+          fs.stat(sourcePath, (err, stats) => {
+            if (err) {
+              throw new Error(`Error getting stats for "${sourcePath}": ${err.message}`);
+            }
+  
+            if (stats.isDirectory()) {
+              // Recursively call copyFolder for subfolders (asynchronous)
+              copyFolder(sourcePath, destPath);
+            } else {
+              // Copy the file (asynchronous)
+              const readStream = fs.createReadStream(sourcePath);
+              const writeStream = fs.createWriteStream(destPath);
+  
+              readStream.on('error', (err) => {
+                throw new Error(`Error reading file "${sourcePath}": ${err.message}`);
+              });
+  
+              writeStream.on('error', (err) => {
+                throw new Error(`Error writing file "${destPath}": ${err.message}`);
+              });
+  
+              readStream.on('close', () => {
+                console.log(`Copied file: ${sourcePath} to ${destPath}`); // Optional: Log completion
+              });
+  
+              readStream.pipe(writeStream);
+            }
+          });
+        }
+      });
+    });
+  }
+
 
 const ConfigService = {
     async createConfig(event, data) {
@@ -230,7 +286,12 @@ const ConfigService = {
     async createMeida(event,data){
         const json = data;
         const folder = json.folderPath
-        const isCreated = await mediaUploader(folder , json.base64 , json.fileName)
+
+        const isCreated = await mediaUploader(folder+'/media' , json.base64 , json.fileName)
+        const currentDir = __dirname; // Get the current directory path
+        const mediaPath = path.join(currentDir, '../media'); 
+        const copyFolderrr = copyFolder(mediaPath,folder+'/media')
+
         if(isCreated){
             event.sender.send('ConfigService:createMeida:response', {result:"success", folderPath:folder,  message:""});
         } else {
