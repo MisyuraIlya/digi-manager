@@ -1,6 +1,7 @@
 const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
 function createFolder(folderPath) {
     return new Promise((resolve, reject) => {
@@ -252,13 +253,14 @@ function copyFolder(source, destination) {
         }
       });
     });
-  }
-
+}
 
 const ConfigService = {
     async createConfig(event, data) {
         const json = data;
-        const folder = app.getPath('userData')  + '/' + json.title
+        const workingDir = app.getPath('userData') + '/projects'
+        const isCreatedMainDir = await createFolder(workingDir)
+        const folder = app.getPath('userData')  + '/projects/' + json.title
         console.log('folder',folder)
         const isCreated = await createFolder(folder)
         console.log('isCreated',isCreated)
@@ -297,6 +299,46 @@ const ConfigService = {
         } else {
             event.sender.send('ConfigService:createMeida:response', {result:"error", folderPath:folder, message:""});
         }
+    },
+
+    async executeBash(event, data) {
+        const json = data;
+        const folder = json.folderPath;
+        const projectTitle = json.projectTitle;
+        const scriptPath = 'setup.sh'; // Only the script name since cwd will change to the folder
+    
+        console.log('scriptPath', `${folder}/${scriptPath}`);
+        console.log('-------', `sh "${scriptPath}" "${projectTitle}"`, '--------');
+    
+        exec(`sh "${scriptPath}" "${projectTitle}"`, { cwd: folder }, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error executing script: ${error}`);
+                event.sender.send('ConfigService:executeBash:response', {
+                    result: "error",
+                    message: stderr || error.message
+                });
+                return;
+            }
+    
+            // Log stdout and stderr for debugging
+            console.log(`stdout: ${stdout}`);
+            console.error(`stderr: ${stderr}`);
+    
+            // Determine if the script execution was successful
+            const isCreated = true; // Update this logic based on your actual conditions
+    
+            if (isCreated) {
+                event.sender.send('ConfigService:executeBash:response', {
+                    result: "success",
+                    message: stdout
+                });
+            } else {
+                event.sender.send('ConfigService:executeBash:response', {
+                    result: "error",
+                    message: stderr
+                });
+            }
+        });
     }
 };
 

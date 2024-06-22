@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useWork } from '../../store/work.store';
 import ImageUploader from '../../utils/ImageUploader';
 import { themeColors } from '../../styles/mui';
+import { ConfigService } from '../../services/config.service';
 
 const Configuration = () => {
 
@@ -42,9 +43,20 @@ const Configuration = () => {
         setSmsApi,
         smsToken,
         setSmsToken,
+        folderPath
     } = useWork()
 
     const [file, setFile] = useState<File | null>(null)
+
+    const execute = async () => {
+        try {
+            const response = await ConfigService.executeBash(folderPath,title)
+            console.log('response',response)
+        } catch(e) {
+            console.log('e',e)
+        }
+    }
+
     return (
         <Box>
             <Grid container spacing={12}>
@@ -237,8 +249,11 @@ const Configuration = () => {
                         value={smsToken} 
                         onChange={(e) => setSmsToken(e.target.value)}
                     />
-                    <Button variant='contained' onClick={() => deployConfig(file)} sx={{position:'absolute', bottom:'5px', right:'25%', minWidth:'200px'}}>
+                    <Button variant='contained' onClick={() => deployConfig(file)} sx={{position:'absolute', bottom:'50px', right:'25%', minWidth:'200px'}}>
                         save options
+                    </Button>
+                    <Button variant='contained' onClick={() => execute()} sx={{position:'absolute', bottom:'5px', right:'25%', minWidth:'200px'}}>
+                        EXECUTE
                     </Button>
                 </Grid>
             </Grid>

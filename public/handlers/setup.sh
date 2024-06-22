@@ -97,14 +97,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Start Docker services
-echo "Starting Docker services..."
-docker-compose up -d
+# # Start Docker services
+# echo "Starting Docker services..."
+# docker-compose up -d
 
-# Check if Docker services started successfully
-if [ $? -ne 0 ]; then
-  echo "Failed to start Docker services."
-  exit 1
-fi
+# # Check if Docker services started successfully
+# if [ $? -ne 0 ]; then
+#   echo "Failed to start Docker services."
+#   exit 1
+# fi
 
-echo "Project setup complete."
+# echo "Project setup complete."

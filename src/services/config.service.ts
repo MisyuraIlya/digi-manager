@@ -29,5 +29,15 @@ export const ConfigService = {
             ipcRenderer.send('ConfigService:createMeida:send',{...obj});
         });
         return result
+    },
+
+    async executeBash(folderPath:string,projectTitle:string):Promise<{result: 'success' | 'error', message:string}> {
+        const result = await new Promise<{result: 'success' | 'error', message:string}>((resolve, reject) => {
+            ipcRenderer.on('ConfigService:executeBash:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('ConfigService:executeBash:send',{folderPath,projectTitle});
+        });
+        return result
     }
 }

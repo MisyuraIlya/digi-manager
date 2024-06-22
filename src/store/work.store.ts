@@ -66,9 +66,12 @@ interface useCartState {
     setIsDisabledLvl1: (value: boolean) => void
     isDisabledLvl3: boolean
     setIsDisabledLvl3: (value: boolean) => void
-
+    folderPath: string
+    
     deployConfig: (file: File | null) => void
 
+    currentProject: string
+    setCurrentProject: (value: string) => void
 }
 
 
@@ -95,6 +98,9 @@ export const useWork = create(
       setPasswordFtp: (password) => set({password}),
       db:'',
       setDb: (db) => set({db}),
+
+      currentProject:'',
+      setCurrentProject:(currentProject) => set({currentProject}),
       
       //CONFIG
       imageState:'',
@@ -139,7 +145,8 @@ export const useWork = create(
       setIsDisabledLvl1:(isDisabledLvl1) => set({isDisabledLvl1}),
       isDisabledLvl3:true,
       setIsDisabledLvl3:(isDisabledLvl3) => set({isDisabledLvl3}),
-
+      folderPath:'',
+      
       //METHODS
       deployConfig: async (file: File | null) => {
         const res = await ConfigService.createFolder({
@@ -171,6 +178,7 @@ export const useWork = create(
           smsToken: get().smsToken,
         })
         if(res.result === "success"){
+            set({folderPath:res.folderPath})
             const logoBase64 = await base64(file)
             const splited = file?.type?.split('/')[1]
             const logo = await ConfigService.createMedia({

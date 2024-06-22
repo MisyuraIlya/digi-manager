@@ -59,4 +59,8 @@ ipcMain.on('FtpService:getDirectoryContents:send', FtpService.getDirectoryConten
 ipcMain.on('ConfigService:createConfig:send', ConfigService.createConfig);
 ipcMain.on('ConfigService:createMeida:send', ConfigService.createMeida);
 ipcMain.on('ConfigService:createFiles:send', ConfigService.createFiles);
+ipcMain.on('ConfigService:executeBash:send', ConfigService.executeBash);
 ipcMain.on('DockerService:cloneRepository:send', DockerService.cloneRepository);
+ipcMain.on('DockerService:openWebSite:send', DockerService.openWebSite);
+ipcMain.on('DockerService:getProjects:send', DockerService.getProjects);
+ipcMain.on('DockerService:stopDocker:send', DockerService.stopDocker);
