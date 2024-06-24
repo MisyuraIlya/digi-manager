@@ -91,8 +91,45 @@ const DockerService = {
             console.log(`stdout: ${stdout}`);
             event.sender.send('DockerService:stopDocker:response', { result:'success', data:stdout, message:'' });
         });
-    }
+    },
+
+    async executeCron(event, data) {
+        exec('docker ps --filter "ancestor=spetsar/backend-template" --format "{{.ID}}"', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: error.message });
+                return;
+            }
     
+            if (stderr) {
+                console.error('[STDERR]', stderr);
+                event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: stderr });
+                return;
+            }
+    
+            const containerId = stdout.trim();
+            const command = `docker exec ${containerId} php bin/console CronManager`;
+    
+            const childProcess = exec(command);
+    
+            childProcess.stdout.on('data', (stdoutData) => {
+                const trimmedData = stdoutData.toString().trim();
+                console.log('[STDOUT]', trimmedData);
+                event.sender.send('DockerService:executeCron:output', { type: 'stdout', data: trimmedData });
+            });
+    
+            childProcess.stderr.on('data', (stderrData) => {
+                const trimmedData = stderrData.toString().trim();
+                console.error('[STDERR]', trimmedData);
+                event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: trimmedData });
+            });
+    
+            childProcess.on('close', (code) => {
+                console.log(`Child process exited with code ${code}`);
+                event.sender.send('DockerService:executeCron:output', { type: 'process_end', data: `Child process exited with code ${code}` });
+            });
+        });
+    }
 };
 
 module.exports = { DockerService };

@@ -39,5 +39,11 @@ export const ConfigService = {
             ipcRenderer.send('ConfigService:executeBash:send',{folderPath,projectTitle});
         });
         return result
+    },
+
+    async openFolder(path:string){
+        await new Promise((resolve, reject) => {
+            ipcRenderer.send('ConfigService:openFolder:send',{path});
+        });
     }
 }

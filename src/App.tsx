@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import createCache from "@emotion/cache"
 import theme from './styles/mui'
 import RouterApp from './RouterApp';
+import { CronProvider } from './providers/CronProvider';
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -15,9 +16,9 @@ function App() {
     <BrowserRouter>
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          {/* <ModalsProvider> */}
-              <RouterApp />
-          {/* </ModalsProvider> */}
+          <CronProvider>
+            <RouterApp />
+          </CronProvider>
         </ThemeProvider>
       </CacheProvider>
     </BrowserRouter>

@@ -45,5 +45,15 @@ export const DockerService = {
             ipcRenderer.send('DockerService:stopDocker:send','');
         });
         return result
+    },
+
+    async executeCron():Promise<{type:string, data:string}> {
+        const result = await new Promise<{type:string, data:string}>((resolve, reject) => {
+            ipcRenderer.on('DockerService:executeCron:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('DockerService:executeCron:send','');
+        });
+        return result 
     }
 }

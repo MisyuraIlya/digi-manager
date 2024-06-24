@@ -27,6 +27,7 @@ const createWindow = () => {
       ? 'http://localhost:4000'
       : `file://${path.join(__dirname, '../build/index.html')}`
   )
+
   if(isDev){
     mainWindow.webContents.openDevTools();
   }
@@ -64,3 +65,5 @@ ipcMain.on('DockerService:cloneRepository:send', DockerService.cloneRepository);
 ipcMain.on('DockerService:openWebSite:send', DockerService.openWebSite);
 ipcMain.on('DockerService:getProjects:send', DockerService.getProjects);
 ipcMain.on('DockerService:stopDocker:send', DockerService.stopDocker);
+ipcMain.on('ConfigService:openFolder:send', ConfigService.openFolder);
+ipcMain.on('DockerService:executeCron:send', DockerService.executeCron);

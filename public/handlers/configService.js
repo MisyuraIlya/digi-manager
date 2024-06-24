@@ -1,4 +1,4 @@
-const { app } = require('electron');
+const { app,shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -339,6 +339,17 @@ const ConfigService = {
                 });
             }
         });
+    },
+
+    async openFolder(event,data){
+        const json = data;
+        const folderPath = json.path; 
+        try {
+            await shell.openPath(folderPath);
+            console.log(`Opened folder: ${folderPath}`);
+        } catch (error) {
+            console.error(`Failed to open folder: ${error.message}`);
+        }
     }
 };
 

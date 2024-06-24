@@ -1,9 +1,9 @@
-import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
 import { DockerService } from '../services/docker.services';
 import { useWork } from '../store/work.store';
+import { ConfigService } from '../services/config.service';
+import Cron from '../components/projects/Cron';
 
 const ipcRenderer = (window as any).ipcRenderer;
 
@@ -32,7 +32,6 @@ const Projects = () => {
 
     const handlerResponse = async () => {
         const response = await DockerService.getProjects()
-        console.log('response', response)
         const res = [] as IProject[]
         response?.data?.map((item: IProject) => {
             let obj = {
@@ -45,7 +44,6 @@ const Projects = () => {
             res.push(obj)
         })
         setProjects(res)
-        console.log('response', response)
     }
 
     const stopDocker = async (project: IProject) => {
@@ -73,6 +71,10 @@ const Projects = () => {
             console.log('error',e)
         }
 
+    }
+
+    const openFolder = async (project: IProject) => {
+        ConfigService.openFolder(project.path)
     }
 
     useEffect(() => {
@@ -113,7 +115,8 @@ const Projects = () => {
                             <TableCell align="left">SERVER</TableCell>
                             <TableCell align="left">Docker</TableCell>
                             <TableCell align="left">Active</TableCell>
-                            <TableCell align="left">Options</TableCell>
+                            <TableCell align="left">Folder</TableCell>
+                            <TableCell align="left">Cron</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -125,12 +128,17 @@ const Projects = () => {
                                 <TableCell align="left">{row.server}</TableCell>
                                 <TableCell align="left">{row.docker}</TableCell>
                                 <TableCell align="left">
-                                    {row.isActive ? <CheckIcon /> : <ClearIcon />}
-                                </TableCell>
-                                <TableCell align="left">
                                     <Button variant='outlined' onClick={() => stopDocker(row)}>
                                         {row.title === currentProject ? <>STOP</> : <>RUN</>}
                                     </Button>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <Button variant='outlined' onClick={() => openFolder(row)}>
+                                        OPEN
+                                    </Button>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <Cron project={row}/>
                                 </TableCell>
                             </TableRow>
                         ))}
