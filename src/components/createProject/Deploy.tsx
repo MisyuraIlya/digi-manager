@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DockerService } from '../../services/docker.services';
 import { useWork } from '../../store/work.store';
 
-const ipcRenderer = (window as any).electron?.ipcRenderer;
+const ipcRenderer = (window as any).ipcRenderer;
 
 const style = {
     position: 'absolute' as 'absolute',

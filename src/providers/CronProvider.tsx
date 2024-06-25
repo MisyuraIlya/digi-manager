@@ -1,7 +1,7 @@
 import React, { FC, createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { DockerService } from '../services/docker.services';
 
-const ipcRenderer = (window as any).electron?.ipcRenderer;
+const ipcRenderer = (window as any).ipcRenderer;
 
 interface ModalContextType {
   loading: boolean;
