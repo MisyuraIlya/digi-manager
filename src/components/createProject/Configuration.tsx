@@ -4,12 +4,11 @@ import { useWork } from '../../store/work.store';
 import ImageUploader from '../../utils/ImageUploader';
 import { themeColors } from '../../styles/mui';
 import { ConfigService } from '../../services/config.service';
+import { Fax } from '@mui/icons-material';
 
 const Configuration = () => {
 
     const {
-        imageState,
-        setImageState,
         primaryColor,
         secondaryColor, 
         setPrimaryColor, 
@@ -20,7 +19,6 @@ const Configuration = () => {
         setMinimumPrice, 
         deliveryPrice,
         setDeliveryPrice,
-        deployConfig,
         description,
         setDescription,
         isWithStock,
@@ -29,33 +27,21 @@ const Configuration = () => {
         setIsWithMigvan,
         email,
         setEmail,
+        location,
+        setLocation,
+        phoneSupport,
+        setPhoneSupport,
+        fax,
+        setFax,
         footerDescription1,
         setDescription1,
         footerDescription2,
         setDescription2,
         footerDescription3,
         setDescription3,
-        oneSignalApi,
-        setOneSignalApi,
-        oneSignalKey,
-        setOneSignalKey,
-        smsApi,
-        setSmsApi,
-        smsToken,
-        setSmsToken,
-        folderPath
+        logoFile,
+        setLogoFile,
     } = useWork()
-
-    const [file, setFile] = useState<File | null>(null)
-
-    const execute = async () => {
-        try {
-            const response = await ConfigService.executeBash(folderPath,title)
-            console.log('response',response)
-        } catch(e) {
-            console.log('e',e)
-        }
-    }
 
     return (
         <Box>
@@ -148,15 +134,22 @@ const Configuration = () => {
                         sx={{margin:'10px 0'}}
                         label="location"
                         variant="standard"  
-                        fullWidth value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
+                        fullWidth value={location} 
+                        onChange={(e) => setLocation(e.target.value)} 
                     />
                     <TextField 
                         sx={{margin:'10px 0'}}
                         label="phone support"
                         variant="standard"  
-                        fullWidth value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
+                        fullWidth value={phoneSupport} 
+                        onChange={(e) => setPhoneSupport(e.target.value)} 
+                    />
+                    <TextField 
+                        sx={{margin:'10px 0'}}
+                        label="fax"
+                        variant="standard"  
+                        fullWidth value={fax} 
+                        onChange={(e) => setFax(e.target.value)} 
                     />
                     <TextField
                         value={footerDescription1}
@@ -207,58 +200,9 @@ const Configuration = () => {
                     <Divider/>
                     <Box sx={{margin:'20px 0'}}>
                     </Box>
-                    <ImageUploader image={file} onChange={(e) => setFile(e)}/>
-                    <Typography variant='h6' sx={{padding:'10px 5px', marginTop:'84px'}}>
-                       One signal
-                    </Typography>
-                    <Divider/>
-                    <TextField 
-                        sx={{margin:'10px 0'}}
-                        fullWidth
-                        label="one signal api key" 
-                        variant="standard" 
-                        value={oneSignalApi} 
-                        onChange={(e) => setSmsApi(e.target.value)}
-                    />
-
-                    <TextField 
-                        sx={{margin:'10px 0'}}
-                        fullWidth
-                        label="one signal chrome key" 
-                        variant="standard" 
-                        value={oneSignalKey} 
-                        onChange={(e) => setSmsToken(e.target.value)}
-                    />
-                    <Typography variant='h6' sx={{padding:'10px 5px', marginTop:'5px'}}>
-                       SMS center
-                    </Typography>
-                    <Divider/>
-                    <TextField 
-                        sx={{margin:'10px 0'}}
-                        fullWidth
-                        label="api endpoint" 
-                        variant="standard" 
-                        value={smsApi} 
-                        onChange={(e) => setSmsApi(e.target.value)}
-                    />
-                    <TextField 
-                        sx={{margin:'10px 0'}}
-                        fullWidth
-                        label="token" 
-                        variant="standard" 
-                        value={smsToken} 
-                        onChange={(e) => setSmsToken(e.target.value)}
-                    />
-                    <Button variant='contained' onClick={() => deployConfig(file)} sx={{position:'absolute', bottom:'50px', right:'25%', minWidth:'200px'}}>
-                        save options
-                    </Button>
-                    <Button variant='contained' onClick={() => execute()} sx={{position:'absolute', bottom:'5px', right:'25%', minWidth:'200px'}}>
-                        EXECUTE
-                    </Button>
+                    <ImageUploader image={logoFile} onChange={(e) => setLogoFile(e)}/>
                 </Grid>
             </Grid>
-      
-
         </Box>
     );
 };

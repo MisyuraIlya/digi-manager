@@ -4,6 +4,7 @@ import { DockerService } from '../services/docker.services';
 import { useWork } from '../store/work.store';
 import { ConfigService } from '../services/config.service';
 import Cron from '../components/projects/Cron';
+import Loader from '../components/Loader';
 
 const ipcRenderer = (window as any).ipcRenderer;
 
@@ -29,7 +30,7 @@ const Projects = () => {
     const [logData, setLogData] = useState('');
     const [log, setLog] = useState(false);
     const logEndRef = useRef<HTMLDivElement | null>(null);
-
+    const [loading, setLoading] = useState(false)
     const handlerResponse = async () => {
         const response = await DockerService.getProjects()
         const res = [] as IProject[]
@@ -47,13 +48,20 @@ const Projects = () => {
     }
 
     const stopDocker = async (project: IProject) => {
-        if (currentProject === project.title) {
-            const data = await DockerService.stopDocker()
-            setCurrentProject('')
-        } else {
-            DockerService.deploy(`${project?.path}/${project.title}`);
-            setCurrentProject(project.title)
-        }
+        try {
+            setLoading(true)
+            if (currentProject === project.title) {
+                const data = await DockerService.stopDocker()
+                setCurrentProject('')
+                setLoading(false)
+            } else {
+                DockerService.deploy(`${project?.path}/${project.title}`);
+                setCurrentProject(project.title)
+            }
+        } catch(e) {
+            console.log('[ERROR]',e)
+        } 
+      
     }
 
     const handleOnChange = async (data: string) => {
@@ -102,11 +110,13 @@ const Projects = () => {
     useEffect(() => {
         if (fpmIsStarted && frontStart) {
             DockerService.openWebSite();
+            setLoading(false)
         }
     }, [fpmIsStarted, frontStart])
 
     return (
         <>
+            <Loader open={loading} setOpen={setLoading}/>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>

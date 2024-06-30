@@ -5,6 +5,7 @@ import createCache from "@emotion/cache"
 import theme from './styles/mui'
 import RouterApp from './RouterApp';
 import { CronProvider } from './providers/CronProvider';
+import { CheckerProvider } from './providers/DockerCheckProvider';
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -16,9 +17,11 @@ function App() {
     <BrowserRouter>
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          <CronProvider>
-            <RouterApp />
-          </CronProvider>
+          <CheckerProvider>
+            <CronProvider>
+              <RouterApp />
+            </CronProvider>
+          </CheckerProvider>
         </ThemeProvider>
       </CacheProvider>
     </BrowserRouter>

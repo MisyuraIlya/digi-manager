@@ -29,13 +29,22 @@ const ImageUploader: FC<ImageUploaderProps> = ({ image, onChange }) => {
     }
   };
 
+  let imageUrl: string | undefined;
+  if (image) {
+    try {
+      imageUrl = URL.createObjectURL(image);
+    } catch (error) {
+      console.error('Failed to create object URL:', error);
+    }
+  }
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Box>
-        {image ? (
-          <img src={URL.createObjectURL(image)} alt="Uploaded" style={{ width: '100%' , height:'300px' }} />
+        {imageUrl ? (
+          <img src={imageUrl} alt="Uploaded" style={{ width: '100%', height: '300px' }} />
         ) : (
-          <img src={process.env.PUBLIC_URL + '/placeholder.png'} alt="Icon" style={{ width: '100%' , height:'300px' }} />
+          <img src={`${process.env.PUBLIC_URL}/placeholder.png`} alt="Icon" style={{ width: '100%', height: '300px' }} />
         )}
         <Button
           fullWidth

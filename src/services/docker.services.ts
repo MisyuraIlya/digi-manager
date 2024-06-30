@@ -55,5 +55,41 @@ export const DockerService = {
             ipcRenderer.send('DockerService:executeCron:send','');
         });
         return result 
-    }
+    },
+
+    async checkIsDockerOpen():Promise<{data:boolean, message:string, status:'error' | 'success'}> {
+        console.log('execute check docker')
+        const result = await new Promise<{data:boolean, message:string, status:'error' | 'success'}>((resolve, reject) => {
+            ipcRenderer.on('DockerService:checkIsDockerOpen:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('DockerService:checkIsDockerOpen:send','');
+        });
+        console.log('result',result)
+        return result   
+    },
+
+    async checkIsGhInstalled():Promise<{data:boolean, message:string, status:'error' | 'success'}> {
+        console.log('execute check docker')
+        const result = await new Promise<{data:boolean, message:string, status:'error' | 'success'}>((resolve, reject) => {
+            ipcRenderer.on('DockerService:checkIsGhInstalled:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('DockerService:checkIsGhInstalled:send','');
+        });
+        console.log('result',result)
+        return result   
+    }, 
+
+    async checkIsGitInstalled():Promise<{data:boolean, message:string, status:'error' | 'success'}> {
+        console.log('execute check docker')
+        const result = await new Promise<{data:boolean, message:string, status:'error' | 'success'}>((resolve, reject) => {
+            ipcRenderer.on('DockerService:checkIsGitInstalled:response', (event:any, response:any) => {
+              resolve(response);
+            });
+            ipcRenderer.send('DockerService:checkIsGitInstalled:send','');
+        });
+        console.log('result',result)
+        return result   
+    },
 }

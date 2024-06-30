@@ -67,3 +67,6 @@ ipcMain.on('DockerService:getProjects:send', DockerService.getProjects);
 ipcMain.on('DockerService:stopDocker:send', DockerService.stopDocker);
 ipcMain.on('ConfigService:openFolder:send', ConfigService.openFolder);
 ipcMain.on('DockerService:executeCron:send', DockerService.executeCron);
+ipcMain.on('DockerService:checkIsDockerOpen:send', DockerService.checkIsDockerOpen);
+ipcMain.on('DockerService:checkIsGhInstalled:send', DockerService.checkIsGhInstalled);
+ipcMain.on('DockerService:checkIsGitInstalled:send', DockerService.checkIsGitInstalled);

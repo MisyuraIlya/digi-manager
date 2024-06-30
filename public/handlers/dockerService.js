@@ -129,7 +129,62 @@ const DockerService = {
                 event.sender.send('DockerService:executeCron:output', { type: 'process_end', data: `Child process exited with code ${code}` });
             });
         });
+    },
+
+    async checkIsDockerOpen(event, data) {
+        console.log('try check docker')
+        try {
+            const isOpen = await new Promise((resolve, reject) => {
+                exec('docker info', (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                        return;
+                    }
+                    resolve(true);
+                });
+            });
+            console.log('isOpen',isOpen)
+            event.sender.send('DockerService:checkIsDockerOpen:response', { status: 'success', data: isOpen, message: '' });
+        } catch (error) {
+            console.log('error',error)
+            event.sender.send('DockerService:checkIsDockerOpen:response', { status: 'error', data: false, message: error.message  });
+        }
+    },
+
+    async checkIsGhInstalled(event, data) {
+        try {
+            const isInstalled = await new Promise((resolve, reject) => {
+                exec('gh --version', (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                        return;
+                    }
+                    resolve(true);
+                });
+            });
+            event.sender.send('DockerService:checkIsGhInstalled:response', { status: 'success', data: isInstalled });
+        } catch (error) {
+            event.sender.send('DockerService:checkIsGhInstalled:response', { status: 'error', data: error.message });
+        }
+    },
+    
+    async checkIsGitInstalled(event, data) {
+        try {
+            const isInstalled = await new Promise((resolve, reject) => {
+                exec('git --version', (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                        return;
+                    }
+                    resolve(true);
+                });
+            });
+            event.sender.send('DockerService:checkIsGitInstalled:response', { status: 'success', data: isInstalled });
+        } catch (error) {
+            event.sender.send('DockerService:checkIsGitInstalled:response', { status: 'error', data: error.message });
+        }
     }
+    
 };
 
 module.exports = { DockerService };

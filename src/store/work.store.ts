@@ -27,6 +27,16 @@ interface useCartState {
     //CONFIG
     imageState: string
     setImageState:(imageState: string) => void
+    categoryState: string
+    setCategoryState: (categoryState: string) => void
+    categoryLvl1:string,
+    setCategoryLvl1:(categoryLvl1: string) => void
+    categoryLvl2:string,
+    setCategoryLvl2:(categoryLvl2: string) => void
+    categoryLvl3:string,
+    setCategoryLvl3:(categoryLvl3: string) => void
+    logoFile: null | File,
+    setLogoFile:(file: File) => void
     title: string
     setTitle: (value: string) => void
     description: string,
@@ -47,6 +57,10 @@ interface useCartState {
     setEmail:(value: string) => void
     location: string,
     setLocation: (value: string) => void,
+    phoneSupport: string,
+    setPhoneSupport: (phoneSupport: string) => void
+    fax:string,
+    setFax:(fax:string) => void
     footerDescription1:string,
     setDescription1:(value: string) => void
     footerDescription2:string,
@@ -61,15 +75,18 @@ interface useCartState {
     setSmsApi:(smsApi: string) => void,
     smsToken:string,
     setSmsToken: (smsToken: string) => void,
-    
+    smsCenterToken: string,
+    setSmsCenterToken: (smsCenterToken:string) => void
+    domain:string,
+    setDomain:(domain:string) => void
+
+
     isDisabledLvl1: boolean
     setIsDisabledLvl1: (value: boolean) => void
     isDisabledLvl3: boolean
     setIsDisabledLvl3: (value: boolean) => void
     folderPath: string
-    
-    deployConfig: (file: File | null) => void
-
+    deployConfig: () => void
     currentProject: string
     setCurrentProject: (value: string) => void
 }
@@ -98,13 +115,22 @@ export const useWork = create(
       setPasswordFtp: (password) => set({password}),
       db:'',
       setDb: (db) => set({db}),
-
       currentProject:'',
       setCurrentProject:(currentProject) => set({currentProject}),
       
       //CONFIG
       imageState:'',
       setImageState:(imageState) => set({imageState}),
+      categoryState:'',
+      setCategoryState: (categoryState) => set({categoryState}),
+      categoryLvl1:'',
+      setCategoryLvl1:(categoryLvl1) => set({categoryLvl1}),
+      categoryLvl2:'',
+      setCategoryLvl2:(categoryLvl2) => set({categoryLvl2}),
+      categoryLvl3:'',
+      setCategoryLvl3:(categoryLvl3) => set({categoryLvl3}),
+      logoFile: null,
+      setLogoFile:(logoFile: File) => set({logoFile}),
       title:'',
       setTitle:(title) => set({title}),
       description:'',
@@ -125,6 +151,10 @@ export const useWork = create(
       setEmail:(email: string) => set({email}),
       location:'',
       setLocation: (location) => set({location}),
+      phoneSupport:'',
+      setPhoneSupport: (phoneSupport) => set({phoneSupport}),
+      fax:'',
+      setFax:(fax) => set({fax}),
       footerDescription1:'',
       setDescription1:(footerDescription1) => set({footerDescription1}),
       footerDescription2:'',
@@ -139,6 +169,10 @@ export const useWork = create(
       setSmsApi:(smsApi) => set({smsApi}),
       smsToken:'',
       setSmsToken: (smsToken) => set({smsToken}),
+      smsCenterToken: '',
+      setSmsCenterToken: (smsCenterToken) => set({smsCenterToken}),
+      domain:'',
+      setDomain:(domain) => set({domain}),
 
       //AC
       isDisabledLvl1:true,
@@ -146,9 +180,9 @@ export const useWork = create(
       isDisabledLvl3:true,
       setIsDisabledLvl3:(isDisabledLvl3) => set({isDisabledLvl3}),
       folderPath:'',
-      
+       
       //METHODS
-      deployConfig: async (file: File | null) => {
+      deployConfig: async () => {
         const res = await ConfigService.createFolder({
           erp: get().erp,
           api: get().api,
@@ -179,6 +213,7 @@ export const useWork = create(
         })
         if(res.result === "success"){
             set({folderPath:res.folderPath})
+            const file = get().logoFile
             const logoBase64 = await base64(file)
             const splited = file?.type?.split('/')[1]
             const logo = await ConfigService.createMedia({

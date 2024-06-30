@@ -7,6 +7,7 @@ interface ModalContextType {
   loading: boolean;
   setLoading: (value: boolean) => void;
   executeCron: () => void;
+  log: string[]
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -27,6 +28,7 @@ const CronProvider: FC<CronProviderProps> = ({ children }) => {
   const [log, setLog] = useState<string[]>([]); // Use an array to store lines of logs
 
   const executeCron = async () => {
+    setLoading(true)
     await DockerService.executeCron();
   };
 
@@ -46,24 +48,17 @@ const CronProvider: FC<CronProviderProps> = ({ children }) => {
 
     ipcRenderer?.on('DockerService:executeCron:output', handleOutput);
 
-    return () => {
-      ipcRenderer?.removeListener('DockerService:executeCron:output', handleOutput); // Clean up event listener
-    };
   }, []);
 
   const value = {
     loading,
     setLoading,
-    executeCron
+    executeCron,
+    log
   };
 
   return (
     <ModalContext.Provider value={value}>
-      <div>
-        {log.map((line, index) => (
-          <div key={index}>{line}</div>
-        ))}
-      </div>
       {children}
     </ModalContext.Provider>
   );

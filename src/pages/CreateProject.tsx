@@ -1,24 +1,33 @@
-import { Box, Button, Step, StepLabel, Stepper, Typography } from '@mui/material';
-import React from 'react';
+import { Backdrop, Box, Button, CircularProgress, DialogContent, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import ApiValidation from '../components/createProject/ApiValidation';
 import Configuration from '../components/createProject/Configuration';
 import Deploy from '../components/createProject/Deploy';
 import ImagesConfig from '../components/createProject/ImagesConfig';
 import { useWork } from '../store/work.store';
 import { ConfigService } from '../services/config.service';
+import Intagration from '../components/createProject/Intagration';
+import { DockerService } from '../services/docker.services';
+import { useLog } from '../store/log.store';
 
-const steps = ['validation API', 'Images' ,'Configuration','Deploy Process' ];
+const steps = ['validation API', 'Images' ,'Configuration', 'Integration' ,'Deploy Process' ];
 
 
 const CreateProject = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const {
+  const [logTitle, setLogTitle] = useState('')
+  const { log: dataLog, logModal, setLogModal, clear} = useLog()
+  const { 
+    folderPath,
+    title, 
+    setCurrentProject,
+    deployConfig,
     isDisabledLvl1,
     isDisabledLvl3
-  } = useWork()
-  
+  } = useWork();
+
   const checkIsDisabled = () => {
     if(activeStep === 1) {
       return isDisabledLvl1
@@ -39,15 +48,17 @@ const CreateProject = () => {
   };
 
   const handleNext = async () => {
-    let newSkipped = skipped;
-
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+    if(activeStep === steps.length - 1){
+      handleExecute()
+    } else {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -67,11 +78,35 @@ const CreateProject = () => {
     });
   };
 
+  const handleExecute = async () => {
+      try {
+          clear()
+          setLogModal(true)
+          setLogTitle('stop exist dockers..')
+          const response0 = await DockerService.stopDocker()
+          console.log('response0',response0)
+          setCurrentProject('')
+          setLogTitle('deploy config')
+          const response1 = await deployConfig()
+          console.log('response1',response1)
+          setLogTitle('create github repository')
+          const response2 =await ConfigService.executeBash(folderPath,title)
+          console.log('response2',response2)
+          setLogTitle('create project docker containers')
+          DockerService.deploy(`${folderPath}/${title}`);
+          setCurrentProject(title)
+      } catch(e) {
+          console.log('e',e)
+      }
+  };
+
+
   const handleReset = () => {
     setActiveStep(0);
   };
 
   return (
+    <>
     <Box sx={{margin:'0 100px'}}>
       <Box sx={{marginTop:'50px'}}>
           <Stepper activeStep={activeStep}>
@@ -107,16 +142,20 @@ const CreateProject = () => {
           </React.Fragment>
           ) : (
           <React.Fragment>
-              {activeStep == 0 &&
+              { activeStep == 0 &&
                 <ApiValidation/>
               }
-              {activeStep == 1 &&
+              { activeStep == 1 &&
                 <ImagesConfig/>
               }
-              {activeStep == 2 &&
+              { activeStep == 2 &&
                 <Configuration/>
               }
-              {activeStep == 3 &&
+              {
+                activeStep == 3 &&
+                <Intagration/>
+              }
+              { activeStep == 4 &&
                 <Deploy/>
               }
               <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -141,6 +180,31 @@ const CreateProject = () => {
           )}
       </Box>
     </Box>
+    <Backdrop open={logModal} onClick={() => setLogModal(false)} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '50px' }}>
+        <Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '50px' }}>
+            <CircularProgress color="inherit"/>
+          </Box>
+          <Typography sx={{ color: 'white', fontWeight: 900, textAlign:'center'}} variant='h5'>
+              {logTitle}
+          </Typography>
+          <Box sx={{width:'100%', margin:'0 auto'}}>
+            <Box sx={{backgroundColor:'white', borderRadius:'5px', color:"black", height:'200px', overflow:'auto', width:'700px'}}>
+              <DialogContent>
+                {dataLog && dataLog?.map((item) => 
+                  <Typography gutterBottom>
+                    {item}
+                  </Typography>
+                )}
+              </DialogContent>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Backdrop>
+    </>
+
 
   );
 };

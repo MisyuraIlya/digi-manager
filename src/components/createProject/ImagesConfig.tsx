@@ -1,18 +1,42 @@
-import { Box, Button, IconButton, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Button, IconButton, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FtpService } from '../../services/ftpService';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useWork } from '../../store/work.store';
+import InfoIcon from '@mui/icons-material/Info';
 
 const ImagesConfig = () => {
-    const [alignment, setAlignment] = React.useState('');
-    const {host,setHost,usernameFtp,setUserNameFtp,passwordFtp,setPasswordFtp} = useWork()
+    const {
+        categoryState,
+        setCategoryState,
+        imageState,
+        setImageState,
+        host,
+        setHost,
+        usernameFtp,
+        setUserNameFtp,
+        passwordFtp,
+        setPasswordFtp, 
+        categoryLvl1, 
+        categoryLvl2,
+        categoryLvl3, 
+        setCategoryLvl1, 
+        setCategoryLvl2, 
+        setCategoryLvl3
+    } = useWork()
 
-    const handleChange = (
+    const handleChangeLocation = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
     ) => {
-        setAlignment(newAlignment);
+        setImageState(newAlignment);
+    };
+
+    const handleChangeCategory = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string,
+    ) => {
+        setCategoryState(newAlignment);
     };
 
     const handleCheck = async () => {
@@ -41,16 +65,16 @@ const ImagesConfig = () => {
                     <ToggleButtonGroup
                         sx={{marginTop:'10px'}}
                         color="primary"
-                        value={alignment}
+                        value={imageState}
                         exclusive
-                        onChange={handleChange}
+                        onChange={handleChangeLocation}
                         aria-label="Platform"
                         >
                         <ToggleButton value="api">In Api</ToggleButton>
                         <ToggleButton value="ftp">FTP Folder</ToggleButton>
                     </ToggleButtonGroup>
                 </Box>
-                {alignment == 'ftp' && 
+                { imageState == 'ftp' && 
                     <Box sx={{display:'flex', gap:'20px', alignItems:'center', justifyContent:'center', padding:'10px'}}>
                         <TextField value={host} onChange={(e) => setHost(e.target.value)} id="standard-basic" label="host" variant="standard" />
                         <TextField value={usernameFtp} onChange={(e) => setUserNameFtp(e.target.value)} id="standard-basic" label="username" variant="standard" />
@@ -65,9 +89,34 @@ const ImagesConfig = () => {
                         </Box>
                     </Box>
                 }
-                <Box>
-
+                <Typography sx={{textAlign:'center', padding:'10px'}}>
+                   Categories 
+                </Typography>
+                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', padding:'10px'}}>
+                    <ToggleButtonGroup
+                        sx={{marginTop:'10px'}}
+                        color="primary"
+                        value={categoryState}
+                        exclusive
+                        onChange={handleChangeCategory}
+                        aria-label="Platform"
+                        >
+                        <ToggleButton value="family">Family table</ToggleButton>
+                        <ToggleButton value="card">Product card</ToggleButton>
+                    </ToggleButtonGroup>
                 </Box>
+                { categoryState == 'card' && 
+                    <Box sx={{display:'flex', gap:'20px', alignItems:'center', justifyContent:'center', padding:'10px'}}>
+                        <TextField value={categoryLvl1} onChange={(e) => setCategoryLvl1(e.target.value)} variant="standard" label="level 1" />
+                        <TextField value={categoryLvl2} onChange={(e) => setCategoryLvl2(e.target.value)} variant="standard" label="level 2"/>
+                        <TextField value={categoryLvl3} onChange={(e) => setCategoryLvl3(e.target.value)} variant="standard" label="level 3"/>
+                        <Tooltip title="SPEC1 ~ SPEC20, additional parameters in priority">
+                            <IconButton>
+                                <InfoIcon color='info'/>
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                }
             </Box>
         </Box>
     );
