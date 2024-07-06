@@ -10,13 +10,13 @@ import Intagration from '../components/createProject/Intagration';
 import { DockerService } from '../services/docker.services';
 import { useLog } from '../store/log.store';
 
-const steps = ['validation API', 'Images' ,'Configuration', 'Integration' ,'Deploy Process' ];
+const steps = ['validation API', 'API config' ,'Configuration', 'Integration' ,'Deploy Process' ];
 
 
 const CreateProject = () => {
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set<number>());
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set<number>());
   const [logTitle, setLogTitle] = useState('')
   const { log: dataLog, logModal, setLogModal, clear} = useLog()
   const { 
@@ -84,14 +84,11 @@ const CreateProject = () => {
           setLogModal(true)
           setLogTitle('stop exist dockers..')
           const response0 = await DockerService.stopDocker()
-          console.log('response0',response0)
           setCurrentProject('')
           setLogTitle('deploy config')
           const response1 = await deployConfig()
-          console.log('response1',response1)
           setLogTitle('create github repository')
           const response2 =await ConfigService.executeBash(folderPath,title)
-          console.log('response2',response2)
           setLogTitle('create project docker containers')
           DockerService.deploy(`${folderPath}/${title}`);
           setCurrentProject(title)
@@ -189,7 +186,7 @@ const CreateProject = () => {
           <Typography sx={{ color: 'white', fontWeight: 900, textAlign:'center'}} variant='h5'>
               {logTitle}
           </Typography>
-          <Box sx={{width:'100%', margin:'0 auto'}}>
+          {/* <Box sx={{width:'100%', margin:'0 auto'}}>
             <Box sx={{backgroundColor:'white', borderRadius:'5px', color:"black", height:'200px', overflow:'auto', width:'700px'}}>
               <DialogContent>
                 {dataLog && dataLog?.map((item) => 
@@ -199,7 +196,7 @@ const CreateProject = () => {
                 )}
               </DialogContent>
             </Box>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Backdrop>

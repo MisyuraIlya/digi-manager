@@ -6,6 +6,7 @@ import theme from './styles/mui'
 import RouterApp from './RouterApp';
 import { CronProvider } from './providers/CronProvider';
 import { CheckerProvider } from './providers/DockerCheckProvider';
+import { ProcessProvider } from './providers/ProcessProvider';
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -17,11 +18,13 @@ function App() {
     <BrowserRouter>
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          <CheckerProvider>
-            <CronProvider>
-              <RouterApp />
-            </CronProvider>
-          </CheckerProvider>
+          <ProcessProvider>
+            <CheckerProvider>
+              <CronProvider>
+                <RouterApp />
+              </CronProvider>
+            </CheckerProvider>
+          </ProcessProvider>
         </ThemeProvider>
       </CacheProvider>
     </BrowserRouter>

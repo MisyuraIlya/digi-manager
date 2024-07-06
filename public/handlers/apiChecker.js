@@ -3,7 +3,6 @@ const axios = require('axios');
 const ApiCheckService = {
     async checkApiEndpoint(event, data) {
         const json = data;
-        console.log('json',json)
         try {
             const response = await axios.get(json.url, {
                 auth: {
@@ -11,7 +10,6 @@ const ApiCheckService = {
                     password: json.password
                 }
             });
-            console.log('response',response)
             if (response.status === 200) {
                 console.log('API endpoint is reachable and returns status 200');
                 event.sender.send('apiCheck:checkUrl:response', { result: 'success' });

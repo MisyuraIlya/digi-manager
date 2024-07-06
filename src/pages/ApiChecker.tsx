@@ -91,25 +91,25 @@ const ApiChecker = () => {
     ]
 
     const handleCheckAllEndpoints = async () => {
-        setOpen(true)
-        // if (!apiUrl || !username || !password) {
-        //     console.error('Please fill in all required fields.');
-        //     return;
-        // }
+        // setOpen(true)
+        if (!apiUrl || !username || !password) {
+            console.error('Please fill in all required fields.');
+            return;
+        }
 
-        // try {
-        //     const endpoints = erps.find(item => item.name === erp)?.endpoints || [];
-        //     for (const endpoint of endpoints) {
-        //         const response = await axios.get(`${apiUrl}${endpoint.path}`, {
-        //             auth: {
-        //                 username: username,
-        //                 password: password
-        //             }
-        //         });
-        //     }
-        // } catch (error) {
-        //     console.error('Error checking endpoints:', error);
-        // }
+        try {
+            const endpoints = erps.find(item => item.name === erp)?.endpoints || [];
+            for (const endpoint of endpoints) {
+                const response = await axios.get(`${apiUrl}${endpoint.path}`, {
+                    auth: {
+                        username: username,
+                        password: password
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error checking endpoints:', error);
+        }
     };
 
     const handleChange = (event: SelectChangeEvent) => {

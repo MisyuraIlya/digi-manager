@@ -4,11 +4,19 @@ import { useWork } from '../../store/work.store';
 
 const Intagration = () => {
     const [smsCenter, setSmsCenter] = useState('');
+
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
     ) => {
         setSmsCenter(newAlignment);
+    };
+
+    const handleChangePaymeny = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string,
+    ) => {
+        setPaymentSystem(newAlignment);
     };
 
     const {
@@ -17,8 +25,17 @@ const Intagration = () => {
         setSmsApi,
         setSmsToken,
         smsCenterToken,
-        setSmsCenterToken
+        setSmsCenterToken,
+        paymentSystem,
+        setPaymentSystem,
+        masof,
+        setMasof,
+        paymentKey,
+        setPaymentKey,
+        passp,
+        setPassp
     } = useWork()
+    
     return (
         <Box>
             <Grid container spacing={12}>
@@ -68,6 +85,56 @@ const Intagration = () => {
                         value={smsCenterToken} 
                         onChange={(e) => setSmsCenterToken(e.target.value)}
                     />
+                </Grid>
+                <Grid item xs={12}>
+                        <Typography variant='h5' fontWeight={700}>
+                            Payment method
+                        </Typography>
+                        <ToggleButtonGroup
+                            sx={{marginTop:'10px'}}
+                            color="primary"
+                            value={paymentSystem}
+                            exclusive
+                            onChange={handleChangePaymeny}
+                            aria-label="Platform"
+                        >
+                            <ToggleButton value="yadsarig">YAD SARIG</ToggleButton>
+                            <ToggleButton value="tranzilla">Tranzilla</ToggleButton>
+                            <ToggleButton value="none">None</ToggleButton>
+                        </ToggleButtonGroup>
+                        { paymentSystem  == 'yadsarig' &&
+                            <Box>
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="masof" 
+                                    variant="standard" 
+                                    value={masof} 
+                                    onChange={(e) => setMasof(e.target.value)}
+                                />
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="payment key" 
+                                    variant="standard" 
+                                    value={paymentKey} 
+                                    onChange={(e) => setPaymentKey(e.target.value)}
+                                />
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="passp" 
+                                    variant="standard" 
+                                    value={passp} 
+                                    onChange={(e) => setPassp(e.target.value)}
+                                />
+                            </Box>
+                        }
+                        { paymentSystem  == 'tranzilla' &&
+                            <Box>
+                                
+                            </Box>
+                        }
                 </Grid>
             </Grid>
         </Box>

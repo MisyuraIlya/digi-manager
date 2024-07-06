@@ -13,7 +13,6 @@ const Deploy = () => {
     const {domain, setDomain} = useWork()
 
     const handleOnChange = async (data:string) => {
-        console.log('data',data)
         try {
             if(data?.includes('fpm is running')){
                 setFrpmIsStarted(true)
@@ -23,7 +22,7 @@ const Deploy = () => {
                 setFrontStart(true)
             }
       
-            setLogData(logData + data)
+            // setLogData(logData + data)
         } catch(e) {
             console.log('error',e)
         }

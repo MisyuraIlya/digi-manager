@@ -18,7 +18,7 @@ const Home = () => {
                         B2B SaaS Solutions. All-in-one Platform
                         </Typography>
                         <Box sx={{display:'flex', gap:'20px', marginTop:'30px'}}>
-                            <Button variant='contained' sx={{borderRadius:'50px', fontSize:'20px', fontWeight:400, lineHeight:'24px', padding:'15px 30px'}} onClick={() => navigate('createProject')}> 
+                            <Button variant='contained' sx={{borderRadius:'50px', fontSize:'20px', fontWeight:400, lineHeight:'24px', padding:'15px 30px'}} onClick={() => navigate('/process')}> 
                                 CREATE PROJECT
                             </Button>
                             <Button variant='outlined' sx={{borderRadius:'50px', fontSize:'20px', fontWeight:400, lineHeight:'24px', padding:'15px 30px'}}>

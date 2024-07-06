@@ -65,12 +65,29 @@ const DockerService = {
         const workingDir = path.join(app.getPath('userData'), 'projects');
         try {
             const files = await fs.promises.readdir(workingDir, { withFileTypes: true });
-            const folders = files
+            const folders = await Promise.all(files
                 .filter(file => file.isDirectory())
-                .map(file => ({
-                    title: file.name,
-                    path: path.join(workingDir, file.name)
-                }));
+                .map(async file => {
+                    const projectPath = path.join(workingDir, file.name);
+                    const packageJsonPath = path.join(projectPath, file.name, 'front', 'package.json');
+                    let version = 'N/A';
+    
+                    try {
+                        const packageJsonData = await fs.promises.readFile(packageJsonPath, 'utf8');
+                        const packageJson = JSON.parse(packageJsonData);
+                        version = packageJson.version || 'N/A';
+                    } catch (error) {
+                        console.warn(`Could not read or parse package.json for ${file.name}:`, error);
+                    }
+    
+                    return {
+                        title: file.name,
+                        path: projectPath,
+                        version: version
+                    };
+                })
+            );
+    
             event.sender.send('DockerService:getProjects:response', { result: 'success', data: folders, message: '' });
         } catch (error) {
             console.error('Error reading directory:', error);
@@ -183,6 +200,46 @@ const DockerService = {
         } catch (error) {
             event.sender.send('DockerService:checkIsGitInstalled:response', { status: 'error', data: error.message });
         }
+    },
+
+    async updateVersion(event, data) {
+        const destinationFolder = data.folderPath;
+        console.log('destinationFolder', destinationFolder);
+      
+        const scriptPath = path.resolve(__dirname, 'update.sh');
+        console.log('scriptPath', scriptPath);
+      
+        const command = `"${scriptPath}" "${destinationFolder}"`;
+      
+        const child = spawn(command, {
+          shell: true
+        });
+      
+        let stdoutData = '';
+        let stderrData = '';
+      
+        child.stdout.on('data', (data) => {
+          stdoutData += data.toString();
+          console.log('stdout:', data.toString());
+        });
+      
+        child.stderr.on('data', (data) => {
+          stderrData += data.toString();
+          console.log('stderr:', data.toString());
+        });
+      
+        child.on('error', (error) => {
+          console.log('error.message', error.message);
+          event.sender.send('DockerService:updateVersion:response', { status: 'error', data: error.message, message: '' });
+        });
+      
+        child.on('exit', (code, signal) => {
+          if (code === 0) {
+            event.sender.send('DockerService:updateVersion:response', { status: 'success', data: stdoutData, message: '' });
+          } else {
+            event.sender.send('DockerService:updateVersion:response', { status: 'error', data: stderrData || `Script exited with code ${code} and signal ${signal}`, message: '' });
+          }
+        });
     }
     
 };

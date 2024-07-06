@@ -25,7 +25,7 @@ interface CronProviderProps {
 }
 const CronProvider: FC<CronProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [log, setLog] = useState<string[]>([]); // Use an array to store lines of logs
+  const [log, setLog] = useState<string[]>([]);
 
   const executeCron = async () => {
     setLoading(true)
@@ -33,12 +33,11 @@ const CronProvider: FC<CronProviderProps> = ({ children }) => {
   };
 
   const handleOnChange = (data: string) => {
-    setLog(prevLog => [...prevLog, data.trim()]); // Append new log line to state
+    setLog(prevLog => [...prevLog, data.trim()]); 
   };
 
   useEffect(() => {
     const handleOutput = (event: any, data: any) => {
-      console.log('data',data)
       if (data.type === 'stdout' || data.type === 'stderr') {
         handleOnChange(data.data); 
       } else if (data.type === 'process_end') {
@@ -54,7 +53,7 @@ const CronProvider: FC<CronProviderProps> = ({ children }) => {
     loading,
     setLoading,
     executeCron,
-    log
+    log,
   };
 
   return (

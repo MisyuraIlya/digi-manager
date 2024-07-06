@@ -70,3 +70,4 @@ ipcMain.on('DockerService:executeCron:send', DockerService.executeCron);
 ipcMain.on('DockerService:checkIsDockerOpen:send', DockerService.checkIsDockerOpen);
 ipcMain.on('DockerService:checkIsGhInstalled:send', DockerService.checkIsGhInstalled);
 ipcMain.on('DockerService:checkIsGitInstalled:send', DockerService.checkIsGitInstalled);
+ipcMain.on('DockerService:updateVersion:send', DockerService.updateVersion);

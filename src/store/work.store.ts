@@ -79,7 +79,14 @@ interface useCartState {
     setSmsCenterToken: (smsCenterToken:string) => void
     domain:string,
     setDomain:(domain:string) => void
-
+    paymentSystem:string,
+    setPaymentSystem:(paymentSystem: string) => void
+    masof:string,
+    setMasof: (masof:string) =>void
+    paymentKey:string,
+    setPaymentKey:(paymentKey:string) => void
+    passp:string,
+    setPassp: (passp:string) => void
 
     isDisabledLvl1: boolean
     setIsDisabledLvl1: (value: boolean) => void
@@ -91,12 +98,18 @@ interface useCartState {
     setCurrentProject: (value: string) => void
 }
 
-
-
-
 export const useWork = create(
   persist(
     (set, get) => ({
+      //PROCESS
+      isDisabledLvl1:true,
+      setIsDisabledLvl1:(isDisabledLvl1) => set({isDisabledLvl1}),
+      isDisabledLvl3:true,
+      setIsDisabledLvl3:(isDisabledLvl3) => set({isDisabledLvl3}),
+      folderPath:'',
+
+            
+      //API
       erp:'',
       setErp:(erp) => set({erp}),
       endpoints:[],
@@ -118,7 +131,7 @@ export const useWork = create(
       currentProject:'',
       setCurrentProject:(currentProject) => set({currentProject}),
       
-      //CONFIG
+      //ERP
       imageState:'',
       setImageState:(imageState) => set({imageState}),
       categoryState:'',
@@ -131,6 +144,8 @@ export const useWork = create(
       setCategoryLvl3:(categoryLvl3) => set({categoryLvl3}),
       logoFile: null,
       setLogoFile:(logoFile: File) => set({logoFile}),
+
+      //CONFIGURATION
       title:'',
       setTitle:(title) => set({title}),
       description:'',
@@ -161,6 +176,8 @@ export const useWork = create(
       setDescription2:(footerDescription2) => set({footerDescription2}),
       footerDescription3:'',
       setDescription3:(footerDescription3) => set({footerDescription3}),
+
+      //INTAGRATION
       oneSignalApi:'',
       setOneSignalApi:(oneSignalApi) => set({oneSignalApi}),
       oneSignalKey:'',
@@ -171,28 +188,33 @@ export const useWork = create(
       setSmsToken: (smsToken) => set({smsToken}),
       smsCenterToken: '',
       setSmsCenterToken: (smsCenterToken) => set({smsCenterToken}),
+      paymentSystem:'',
+      setPaymentSystem:(paymentSystem) => set({paymentSystem}),
+      masof:'',
+      setMasof: (masof:string) => set({masof}),
+      paymentKey:'',
+      setPaymentKey:(paymentKey) => set({paymentKey}),
+      passp:'',
+      setPassp: (passp) => set({passp}),
       domain:'',
       setDomain:(domain) => set({domain}),
 
-      //AC
-      isDisabledLvl1:true,
-      setIsDisabledLvl1:(isDisabledLvl1) => set({isDisabledLvl1}),
-      isDisabledLvl3:true,
-      setIsDisabledLvl3:(isDisabledLvl3) => set({isDisabledLvl3}),
-      folderPath:'',
-       
+
       //METHODS
       deployConfig: async () => {
         const res = await ConfigService.createFolder({
+          //ERP API
           erp: get().erp,
           api: get().api,
           username: get().username,
           password: get().password,
-          host: get().host,
+          ftpHost: get().host,
           usernameFtp: get().usernameFtp,
           passwordFtp: get().passwordFtp,
           db: get().db,
           imageState: get().imageState,
+
+          //CONFIGURATION
           title:get().title,
           description: get().description,
           minimumPrice: get().minimumPrice,
@@ -203,13 +225,24 @@ export const useWork = create(
           isWithMigvan: get().isWithMigvan,
           email: get().email,
           location: get().location,
+          phoneSupport: get().phoneSupport,
+          fax: get().fax,
           footerDescription1: get().footerDescription1,
           footerDescription2: get().footerDescription2,
           footerDescription3: get().footerDescription3,
+
+          //INTEGRATION
           oneSignalApi: get().oneSignalApi,
           oneSignalKey: get().oneSignalKey,
           smsApi: get().smsApi,
           smsToken: get().smsToken,
+          smsCenterToken: get().smsCenterToken,
+          paymentSystem: get().paymentSystem,
+          masof: get().masof,
+          paymentKey: get().paymentKey,
+          passp: get().passp,
+          domain: get().domain,
+
         })
         if(res.result === "success"){
             set({folderPath:res.folderPath})
@@ -222,6 +255,7 @@ export const useWork = create(
               fileName:`logo.${splited}`
             })
             const files = await ConfigService.createFiles({
+                //ERP API
                 folderPath: res.folderPath,
                 erp: get().erp,
                 api: get().api,
@@ -232,6 +266,8 @@ export const useWork = create(
                 passwordFtp: get().passwordFtp,
                 db: get().db,
                 imageState: get().imageState,
+
+                //CONFIGURATION
                 title:get().title,
                 description: get().description,
                 minimumPrice: get().minimumPrice,
@@ -242,13 +278,24 @@ export const useWork = create(
                 isWithMigvan: get().isWithMigvan,
                 email: get().email,
                 location: get().location,
+                phoneSupport: get().phoneSupport,
+                fax: get().fax,
                 footerDescription1: get().footerDescription1,
                 footerDescription2: get().footerDescription2,
                 footerDescription3: get().footerDescription3,
+
+                //INTEGRATION
                 oneSignalApi: get().oneSignalApi,
                 oneSignalKey: get().oneSignalKey,
                 smsApi: get().smsApi,
                 smsToken: get().smsToken,
+                smsCenterToken: get().smsCenterToken,
+                paymentSystem: get().paymentSystem,
+                masof: get().masof,
+                paymentKey: get().paymentKey,
+                passp: get().passp,
+                domain: get().domain,
+                
             })
             console.log('files',files)
         } else {

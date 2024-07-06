@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import ApiChecker from './pages/ApiChecker';
 import CreateProject from './pages/CreateProject';
 import Projects from './pages/Projects';
+import ProcessPage from './pages/ProcessPage';
+
 const RouterApp = () => {
     return (
     <Box sx={{bgcolor:'#fff', minHeight:'100vh'}}>
@@ -15,6 +17,7 @@ const RouterApp = () => {
             <Route>
               <Route path="/" element={<Home />} />
               <Route path="/createProject" element={<CreateProject />} />
+              <Route path="/process" element={<ProcessPage/>} />
               <Route path="/apiChecker" element={<ApiChecker />} />
               <Route path="/projects" element={<Projects />} />
             </Route>
