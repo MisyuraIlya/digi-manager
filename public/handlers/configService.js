@@ -273,11 +273,15 @@ const ConfigService = {
 
     async createFiles(event, data) {
         const json = data;
+        console.log('json',json)
         const jsonFilePath = json.folderPath;
         const envFilePath = json.folderPath;
         const isCreatedJsonFile = await createJsonFile(jsonFilePath,json)
+        console.log('isCreatedJsonFile',isCreatedJsonFile)
         const isCreatedEnvFile =  await createEnvFile(envFilePath,json)
+        console.log('isCreatedEnvFile',isCreatedEnvFile)
         const copySetupSh = await copyFileName(envFilePath,'setup.sh')
+        console.log('copySetupSh',copySetupSh)
         if(isCreatedJsonFile && isCreatedEnvFile) {
             event.sender.send('ConfigService:createFiles:response', {result:"success",  message:""});
         } else {

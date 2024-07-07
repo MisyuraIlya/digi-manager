@@ -202,48 +202,9 @@ export const useWork = create(
 
       //METHODS
       deployConfig: async () => {
-        const res = await ConfigService.createFolder({
-          //ERP API
-          erp: get().erp,
-          api: get().api,
-          username: get().username,
-          password: get().password,
-          ftpHost: get().host,
-          usernameFtp: get().usernameFtp,
-          passwordFtp: get().passwordFtp,
-          db: get().db,
-          imageState: get().imageState,
-
-          //CONFIGURATION
-          title:get().title,
-          description: get().description,
-          minimumPrice: get().minimumPrice,
-          deliveryPrice: get().deliveryPrice,
-          primaryColor:  get().primaryColor,
-          secondaryColor: get().secondaryColor,
-          isWithStock: get().isWithStock,
-          isWithMigvan: get().isWithMigvan,
-          email: get().email,
-          location: get().location,
-          phoneSupport: get().phoneSupport,
-          fax: get().fax,
-          footerDescription1: get().footerDescription1,
-          footerDescription2: get().footerDescription2,
-          footerDescription3: get().footerDescription3,
-
-          //INTEGRATION
-          oneSignalApi: get().oneSignalApi,
-          oneSignalKey: get().oneSignalKey,
-          smsApi: get().smsApi,
-          smsToken: get().smsToken,
-          smsCenterToken: get().smsCenterToken,
-          paymentSystem: get().paymentSystem,
-          masof: get().masof,
-          paymentKey: get().paymentKey,
-          passp: get().passp,
-          domain: get().domain,
-
-        })
+        const res = await ConfigService.createFolder(
+          get().title
+        )
         if(res.result === "success"){
             set({folderPath:res.folderPath})
             const file = get().logoFile

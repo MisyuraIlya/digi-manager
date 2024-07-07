@@ -28,6 +28,12 @@ interface useConfigState {
     setCategoryLvl2:(categoryLvl2: string) => void
     categoryLvl3:string,
     setCategoryLvl3:(categoryLvl3: string) => void
+    host: string
+    setHost: (host:string) => void
+    usernameFtp: string
+    setUserNameFtp: (username:string) => void
+    passwordFtp: string
+    setPasswordFtp: (password:string) => void
     //===
     //CONFIG
     title: string
@@ -119,6 +125,12 @@ export const useConfig = create<useConfigState>()(
       setCategoryLvl2:(categoryLvl2) => set({categoryLvl2}),
       categoryLvl3:'',
       setCategoryLvl3:(categoryLvl3) => set({categoryLvl3}),
+      host:'',
+      setHost: (host) => set({host}),
+      usernameFtp: '',
+      setUserNameFtp: (username) =>set({username}),
+      passwordFtp: '',
+      setPasswordFtp: (password) => set({password}),
       //===
       //CONFIGURATION
       title:'',
@@ -152,7 +164,10 @@ export const useConfig = create<useConfigState>()(
       footerDescription3:'',
       setDescription3:(footerDescription3) => set({footerDescription3}),
       logoFile: null,
-      setLogoFile:(logoFile: File) => set({logoFile}),
+      setLogoFile:(logoFile: File) => {
+        console.log('logoFile',logoFile)
+        set({logoFile})
+      },
       //===
       //INTAGRATION
       oneSignalApi:'',

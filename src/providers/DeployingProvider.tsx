@@ -1,13 +1,19 @@
 import React, { FC, createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { DockerService } from '../services/docker.services';
 import { Backdrop, Box, CircularProgress, DialogContent, Typography } from '@mui/material';
+import { ConfigService } from '../services/config.service';
+import { useProject } from '../store/projects.stroe';
+import { base64 } from '../helpers/base64';
+import { useConfig } from '../store/config.store';
 
 const ipcRenderer = (window as any).ipcRenderer;
 
 interface ModalContextType {
+  dataLog: string[]
   setDataLog: (data: []) => void 
   setLogModal: (value: boolean) => void
   setLogTitle: (value: string) => void
+  deployConfig: () => void
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -24,49 +30,145 @@ interface DeployingProviderProps {
   children: ReactNode;
 }
 const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
-  const [loading, setLoading] = useState(false)
   const [fpmIsStarted, setFrpmIsStarted] = useState(false)
   const [frontStart, setFrontStart] = useState(false)
   const [logModal, setLogModal] = useState(false)
   const [logTitle, setLogTitle] = useState('')
   const [dataLog, setDataLog] = useState<string[]>([])
+  const { setFolderPath } = useProject()
+  const {
+    erp,
+    api,
+    username,
+    password,
+    host,
+    usernameFtp,
+    passwordFtp,
+    db,
+    imageState,
+    title,
+    description,
+    minimumPrice,
+    deliveryPrice,
+    primaryColor,
+    secondaryColor,
+    isWithStock,
+    isWithMigvan,
+    email,
+    location,
+    phoneSupport,
+    fax,
+    footerDescription1,
+    footerDescription2,
+    footerDescription3,
+    oneSignalApi,
+    oneSignalKey,
+    smsApi,
+    smsToken,
+    smsCenterToken,
+    paymentSystem,
+    masof,
+    paymentKey,
+    passp,
+    domain,
+    logoFile
+  } = useConfig()
+
 
   const handler = async (data:string) => {
-      if(data?.includes('fpm is running')){
-          setFrpmIsStarted(true)
-      }
+    const stringData = String(data);
 
-      if(data?.includes('start worker processes')){
-          setFrontStart(true)
-      }
-      setDataLog(prev => [...prev, data])
+    if (stringData.includes('fpm is running')) {
+      setFrpmIsStarted(true);
+    }
+  
+    if (stringData.includes('start worker processes')) {
+      setFrontStart(true);
+    }
+  
+    setDataLog(prev => [...prev, stringData]);
+  }
+
+  const deployConfig = async () => {
+    const res = await ConfigService.createFolder(title)
+    setFolderPath(res.folderPath)
+    const logoBase64 = await base64(logoFile)
+    const splited = logoFile?.type?.split('/')[1]
+    const logo = await ConfigService.createMedia({
+      folderPath: res.folderPath,
+      base64: logoBase64,
+      fileName:`logo.${splited}`
+    })
+    const files = await ConfigService.createFiles({
+      folderPath: res.folderPath,
+      //ERP API
+      erp,
+      api,
+      username,
+      password,
+      host,
+      usernameFtp,
+      passwordFtp,
+      db,
+      imageState,
+
+      //CONFIGURATION
+      title,
+      description,
+      minimumPrice,
+      deliveryPrice,
+      primaryColor,
+      secondaryColor,
+      isWithStock,
+      isWithMigvan,
+      email,
+      location,
+      phoneSupport,
+      fax,
+      footerDescription1,
+      footerDescription2,
+      footerDescription3,
+
+      //INTEGRATION
+      oneSignalApi,
+      oneSignalKey,
+      smsApi,
+      smsToken,
+      smsCenterToken,
+      paymentSystem,
+      masof,
+      paymentKey,
+      passp,
+      domain,
+    })
   }
 
   useEffect(() => {
     const handleDeployOutput = (event: any, data: any) => {
-        if (data.type === 'stdout' || data.type === 'stderr') {
-          handler(data.data);
-        }
-    };
-    const handleDeployComplete = (event: any, data: any) => {
-      handler(data.code);
-    };
-    ipcRenderer?.on('DockerService:deploy:output', handleDeployOutput);
-    ipcRenderer?.on('DockerService:deploy:complete', handleDeployComplete);
-}, []);
+          if (data.type === 'stdout' || data.type === 'stderr') {
+            handler(data.data);
+          }
+      };
+      const handleDeployComplete = (event: any, data: any) => {
+        handler(data.code);
+      };
+      ipcRenderer?.on('DockerService:deploy:output', handleDeployOutput);
+      ipcRenderer?.on('DockerService:deploy:complete', handleDeployComplete);
+  }, []);
 
-useEffect(() => {
-  if(fpmIsStarted && frontStart){
-      DockerService.openWebSite();
-      setLogModal(false)
-  }
-},[fpmIsStarted,frontStart])
-
+  useEffect(() => {
+    if(fpmIsStarted && frontStart) {
+        DockerService.openWebSite();
+        setLogModal(false)
+    }
+  },[fpmIsStarted,frontStart])
 
   const value = {
+    dataLog,
     setDataLog,
     setLogModal,
-    setLogTitle
+    setLogTitle,
+    deployConfig
   };
 
   return (

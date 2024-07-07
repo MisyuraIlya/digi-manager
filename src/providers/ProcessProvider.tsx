@@ -3,8 +3,8 @@ import Loader from '../components/Loader';
 import { useConfig } from '../store/config.store';
 import { useDeploying } from './DeployingProvider';
 import { DockerService } from '../services/docker.services';
-
-const ipcRenderer = (window as any).ipcRenderer;
+import { useProject } from '../store/projects.stroe';
+import { ConfigService } from '../services/config.service';
 
 const steps = ['validation API', 'Images' ,'Configuration', 'Integration' ,'Deploy Process' ];
 
@@ -50,13 +50,13 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
     smsCenterToken,
     smsToken,
     domain
-
   } = useConfig()
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [lvl1, setLvl1] = useState(true)
-  const {setDataLog,setLogModal,setLogTitle} = useDeploying()
-  
+  const {setDataLog,setLogModal,setLogTitle,deployConfig} = useDeploying()
+  const {setCurrentProject,folderPath} = useProject()
+
   const checkIsDisabled = () => {
     if(activeStep === 0) {
       return false //delete afteher done
@@ -90,7 +90,7 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
     }
 
     if(activeStep === 3){
-      if(!oneSignalApi || !smsCenter || !smsCenterToken || !oneSignalKey || !smsToken){
+      if(!oneSignalApi || !smsCenter || !smsCenterToken || !oneSignalKey ){
         return true
       } else {
         return false
@@ -104,14 +104,13 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
         return false
       }
     }
-
     return false
   }
 
   const handleNext = async () => {
     if(activeStep === steps.length - 1){
       setActiveStep(steps.length)
-      handleExecute()
+      handleProjectExecute()
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -159,20 +158,20 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
     return ''
   }
 
-  const handleExecute = async () => {
+  const handleProjectExecute = async () => {
       try {
           setDataLog([])
           setLogModal(true)
           setLogTitle('stop exist dockers..')
           const response0 = await DockerService.stopDocker()
-          // setCurrentProject('')
-          // setLogTitle('deploy config')
-          // const response1 = await deployConfig()
-          // setLogTitle('create github repository')
-          // const response2 =await ConfigService.executeBash(folderPath,title)
-          // setLogTitle('create project docker containers')
-          // DockerService.deploy(`${folderPath}/${title}`);
-          // setCurrentProject(title)
+          setCurrentProject('')
+          setLogTitle('deploy config')
+          const response1 = await deployConfig()
+          setLogTitle('create github repository')
+          const response2 =await ConfigService.executeBash(folderPath,title)
+          setLogTitle('create project docker containers')
+          DockerService.deploy(`${folderPath}/${title}`);
+          setCurrentProject(title)
       } catch(e) {
           console.log('e',e)
       }

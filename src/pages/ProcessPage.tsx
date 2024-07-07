@@ -1,12 +1,10 @@
-import { Box, Button, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import React from 'react';
+import { Box, Button, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import { useProcess } from '../providers/ProcessProvider';
 import Process from '../components/Process';
 
 const ProcessPage = () => {
     const {activeStep, setActiveStep, checkIsDisabled, handleNext, steps, handleWhatNeed} = useProcess()
-    
-    
     return (
         <Box>
             <Stepper activeStep={activeStep}>

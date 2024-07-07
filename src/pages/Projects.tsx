@@ -1,9 +1,9 @@
 import { Box,Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { DockerService } from '../services/docker.services';
-import Card from './Card';
-import { useCron } from '../providers/CronProvider';
+import Card from '../components/projects/Card';
 import Loader from '../components/Loader';
+import { useDeploying } from '../providers/DeployingProvider';
 
 
 const style = {
@@ -25,8 +25,8 @@ const Projects = () => {
     const [logModal, setLogModal] = useState(false);
     const logEndRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false)
-    const { log } = useCron()
-            
+    const { dataLog } = useDeploying()
+    
     const fetchProjects = async () => {
         const response = await DockerService.getProjects()
         const res = [] as IProject[]
@@ -72,7 +72,11 @@ const Projects = () => {
             <Modal open={logModal} onClose={() => setLogModal(false)}>
                 <Box sx={style}>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {log}
+                        {dataLog && dataLog?.map((item) => 
+                            <Typography gutterBottom>
+                            {item}
+                            </Typography>
+                        )}
                         <div ref={logEndRef}></div>
                     </Typography>
                 </Box>
