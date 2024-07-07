@@ -44,9 +44,7 @@ const CronProvider: FC<CronProviderProps> = ({ children }) => {
         setLoading(false); 
       }
     };
-
     ipcRenderer?.on('DockerService:executeCron:output', handleOutput);
-
   }, []);
 
   const value = {

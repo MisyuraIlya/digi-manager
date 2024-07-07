@@ -71,7 +71,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     paymentKey,
     passp,
     domain,
-    logoFile
+    logoFile,
   } = useConfig()
 
 
@@ -162,6 +162,22 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
         setLogModal(false)
     }
   },[fpmIsStarted,frontStart])
+
+  
+  const executeCron = async () => {
+    await DockerService.executeCron();
+  };
+
+  useEffect(() => {
+    const handleOutput = (event: any, data: any) => {
+      if (data.type === 'stdout' || data.type === 'stderr') {
+        handleOnChange(data.data); 
+      } else if (data.type === 'process_end') {
+        setLoading(false); 
+      }
+    };
+    ipcRenderer?.on('DockerService:executeCron:output', handleOutput);
+  }, []);
 
   const value = {
     dataLog,
