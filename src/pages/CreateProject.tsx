@@ -1,4 +1,4 @@
-import { Backdrop, Box, Button, CircularProgress, DialogContent, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Backdrop, Box, Button, CircularProgress, DialogContent, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import ApiValidation from '../components/createProject/ApiValidation';
 import Configuration from '../components/createProject/Configuration';
@@ -8,7 +8,7 @@ import { useWork } from '../store/work.store';
 import { ConfigService } from '../services/config.service';
 import Intagration from '../components/createProject/Intagration';
 import { DockerService } from '../services/docker.services';
-import { useLog } from '../store/log.store';
+// import { useLog } from '../store/log.store';
 
 const steps = ['validation API', 'API config' ,'Configuration', 'Integration' ,'Deploy Process' ];
 
@@ -18,7 +18,7 @@ const CreateProject = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [logTitle, setLogTitle] = useState('')
-  const { log: dataLog, logModal, setLogModal, clear} = useLog()
+  // const { log: dataLog, logModal, setLogModal, clear} = useLog()
   const { 
     folderPath,
     title, 
@@ -80,8 +80,8 @@ const CreateProject = () => {
 
   const handleExecute = async () => {
       try {
-          clear()
-          setLogModal(true)
+          // clear()
+          // setLogModal(true)
           setLogTitle('stop exist dockers..')
           const response0 = await DockerService.stopDocker()
           setCurrentProject('')
@@ -169,15 +169,18 @@ const CreateProject = () => {
                     Skip
                     </Button>
                 )}
-                <Button disabled={checkIsDisabled()} onClick={handleNext} variant='contained' color='secondary'>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                <Tooltip title="asd" placement="top">
+                  <Button disabled={checkIsDisabled()} onClick={handleNext} variant='contained' color='secondary'>
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
+                </Tooltip>
+       
               </Box>
           </React.Fragment>
           )}
       </Box>
     </Box>
-    <Backdrop open={logModal} onClick={() => setLogModal(false)} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    {/* <Backdrop open={logModal} onClick={() => setLogModal(false)} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '50px' }}>
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '50px' }}>
@@ -186,7 +189,7 @@ const CreateProject = () => {
           <Typography sx={{ color: 'white', fontWeight: 900, textAlign:'center'}} variant='h5'>
               {logTitle}
           </Typography>
-          {/* <Box sx={{width:'100%', margin:'0 auto'}}>
+          <Box sx={{width:'100%', margin:'0 auto'}}>
             <Box sx={{backgroundColor:'white', borderRadius:'5px', color:"black", height:'200px', overflow:'auto', width:'700px'}}>
               <DialogContent>
                 {dataLog && dataLog?.map((item) => 
@@ -196,10 +199,10 @@ const CreateProject = () => {
                 )}
               </DialogContent>
             </Box>
-          </Box> */}
+          </Box>
         </Box>
       </Box>
-    </Backdrop>
+    </Backdrop> */}
     </>
 
 

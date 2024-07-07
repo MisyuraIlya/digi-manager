@@ -7,6 +7,7 @@ import RouterApp from './RouterApp';
 import { CronProvider } from './providers/CronProvider';
 import { CheckerProvider } from './providers/DockerCheckProvider';
 import { ProcessProvider } from './providers/ProcessProvider';
+import { DeployingProvider } from './providers/DeployingProvider';
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -18,13 +19,15 @@ function App() {
     <BrowserRouter>
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          <ProcessProvider>
-            <CheckerProvider>
-              <CronProvider>
-                <RouterApp />
-              </CronProvider>
-            </CheckerProvider>
-          </ProcessProvider>
+          <DeployingProvider>
+            <ProcessProvider>
+              <CheckerProvider>
+                <CronProvider>
+                  <RouterApp />
+                </CronProvider>
+              </CheckerProvider>
+            </ProcessProvider>
+          </DeployingProvider>
         </ThemeProvider>
       </CacheProvider>
     </BrowserRouter>

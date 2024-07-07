@@ -1,10 +1,12 @@
-import { Box, Button, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Box, Button, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import { useProcess } from '../providers/ProcessProvider';
 import Process from '../components/Process';
 
 const ProcessPage = () => {
-    const {activeStep, setActiveStep, checkIsDisabled, handleNext, steps} = useProcess()
+    const {activeStep, setActiveStep, checkIsDisabled, handleNext, steps, handleWhatNeed} = useProcess()
+    
+    
     return (
         <Box>
             <Stepper activeStep={activeStep}>
@@ -50,9 +52,14 @@ const ProcessPage = () => {
                         Back
                     </Button>
                     <Box sx={{ flex: '1 1 auto' }} />
-                    <Button disabled={checkIsDisabled()} onClick={handleNext} variant='contained' color='secondary'>
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                    </Button>
+                    <Tooltip title={handleWhatNeed()} placement="top">
+                        <Box>
+                            <Button disabled={checkIsDisabled()} onClick={handleNext} variant='contained' color='secondary'>
+                                {activeStep === steps.length - 1 ? 'Deploy' : 'Next'}
+                            </Button>
+                        </Box>
+                    </Tooltip>
+                
                 </Box>
             </>
             )}

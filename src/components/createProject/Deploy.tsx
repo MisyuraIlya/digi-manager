@@ -2,12 +2,11 @@ import { Box, Divider, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DockerService } from '../../services/docker.services';
 import { useWork } from '../../store/work.store';
-import { useLog } from '../../store/log.store';
 
 const ipcRenderer = (window as any).ipcRenderer;
 
 const Deploy = () => {
-    const {log: logData, setLog:setLogData, setLogModal } = useLog()
+    // const {log: logData, setLog:setLogData, setLogModal } = useLog()
     const [fpmIsStarted, setFrpmIsStarted] = useState(false)
     const [frontStart, setFrontStart] = useState(false)
     const {domain, setDomain} = useWork()
@@ -51,7 +50,7 @@ const Deploy = () => {
     useEffect(() => {
         if(fpmIsStarted && frontStart){
             DockerService.openWebSite();
-            setLogModal(false)
+            // setLogModal(false)
         }
     },[fpmIsStarted,frontStart])
 
