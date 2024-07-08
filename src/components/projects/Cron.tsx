@@ -25,7 +25,7 @@ const style = {
 
 const Cron:FC<ICron> = ({project}) => {
     const { currentProject } = useWork()
-    const { executeCron, loading, setLogModal } = useDeploying()
+    const { executeCron, loading, setLogCronModal } = useDeploying()
     
     return (
         <>
@@ -41,7 +41,7 @@ const Cron:FC<ICron> = ({project}) => {
                         <CircularProgress/>
                     </Box>
                 }
-                    <IconButton onClick={() => setLogModal(true)}>
+                    <IconButton onClick={() => setLogCronModal(true)}>
                         <InfoIcon/>
                     </IconButton>
             </Box>

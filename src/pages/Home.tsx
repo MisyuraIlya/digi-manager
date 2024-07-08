@@ -2,8 +2,6 @@ import React from 'react';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const Home = () => {
     const navigate = useNavigate()
     return (
@@ -32,7 +30,6 @@ const Home = () => {
                         <img src={process.env.PUBLIC_URL + '/hero.png'} alt="Icon" style={{width:'100%'}}/>
                     </Box>
                 </Grid>
-
             </Grid>
         </Box>
     );

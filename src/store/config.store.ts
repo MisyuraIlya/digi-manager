@@ -28,12 +28,8 @@ interface useConfigState {
     setCategoryLvl2:(categoryLvl2: string) => void
     categoryLvl3:string,
     setCategoryLvl3:(categoryLvl3: string) => void
-    host: string
-    setHost: (host:string) => void
-    usernameFtp: string
-    setUserNameFtp: (username:string) => void
-    passwordFtp: string
-    setPasswordFtp: (password:string) => void
+    testUser:string,
+    setTestUser:(testUser:string) => void
     //===
     //CONFIG
     title: string
@@ -125,12 +121,8 @@ export const useConfig = create<useConfigState>()(
       setCategoryLvl2:(categoryLvl2) => set({categoryLvl2}),
       categoryLvl3:'',
       setCategoryLvl3:(categoryLvl3) => set({categoryLvl3}),
-      host:'',
-      setHost: (host) => set({host}),
-      usernameFtp: '',
-      setUserNameFtp: (username) =>set({username}),
-      passwordFtp: '',
-      setPasswordFtp: (password) => set({password}),
+      testUser:'',
+      setTestUser:(testUser) => set({testUser}),
       //===
       //CONFIGURATION
       title:'',

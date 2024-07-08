@@ -8,10 +8,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useProcess } from '../../providers/ProcessProvider';
 
 const Images = () => {
-    const {imageState, setImageState,ftpHost,ftpUsername,ftpPassword, setFtpHost,setFtpUsername,setFtpPassword,categoryState,setCategoryState,categoryLvl1,categoryLvl2,categoryLvl3, setCategoryLvl1,setCategoryLvl2,setCategoryLvl3} = useConfig()
+    const {imageState, setImageState,ftpHost,ftpUsername,ftpPassword, setFtpHost,setFtpUsername,setFtpPassword,categoryState,setCategoryState,categoryLvl1,categoryLvl2,categoryLvl3, setCategoryLvl1,setCategoryLvl2,setCategoryLvl3, testUser, setTestUser} = useConfig()
     const [alert,setAlert] = useState(false)
     const [alertMessage,setAlertMessage] = useState('')
     const {setLoading} = useProcess()
+    
     const handleChangeLocation = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
@@ -122,6 +123,14 @@ const Images = () => {
                     </Tooltip>
                 </Box>
             }
+            <Box>
+                <Typography sx={{textAlign:'center', padding:'10px'}}>
+                    user configuration
+                </Typography>
+                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', padding:'10px'}}>
+                    <TextField value={testUser} onChange={(e) => setTestUser(e.target.value)} variant="standard" label="test user external id" />
+                </Box>
+            </Box>
         </Box>
     </Box>
     );

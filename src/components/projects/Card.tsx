@@ -6,6 +6,7 @@ import { ConfigService } from '../../services/config.service';
 import { useWork } from '../../store/work.store';
 import { DockerService } from '../../services/docker.services';
 import Loader from '../Loader';
+import { useProject } from '../../store/projects.stroe';
 
 interface ICardProps {
     row: IProject,
@@ -16,7 +17,7 @@ interface ICardProps {
 const Card:FC<ICardProps> = ({row, index, fetchProjects}) => {
     const [loading, setLoading] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const { currentProject, setCurrentProject } = useWork()
+    const { currentProject, setCurrentProject } = useProject()
     const open = Boolean(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

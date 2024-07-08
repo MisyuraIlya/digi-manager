@@ -16,6 +16,7 @@ interface ModalContextType {
   setLogTitle: (value: string) => void
   deployConfig: () => void
   executeCron: () => void
+  setLogCronModal: (value: boolean) => void
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -34,9 +35,11 @@ interface DeployingProviderProps {
 const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
   const [fpmIsStarted, setFrpmIsStarted] = useState(false)
   const [frontStart, setFrontStart] = useState(false)
-  const [logModal, setLogModal] = useState(false)
   const [logTitle, setLogTitle] = useState('')
   const [dataLog, setDataLog] = useState<string[]>([])
+  const [logModal, setLogModal] = useState(false)
+  const [logCron, setLogCron] = useState<string[]>([])
+  const [logCronModal, setLogCronModal] = useState(false)
   const { setFolderPath } = useProject()
   const [loading, setLoading] = useState(false)
 
@@ -45,17 +48,22 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     api,
     username,
     password,
-    host,
-    usernameFtp,
-    passwordFtp,
     db,
+
     imageState,
+    ftpHost,
+    ftpUsername,
+    ftpPassword,
+    testUser,
+    categoryState,
+    categoryLvl1,
+    categoryLvl2,
+    categoryLvl3,
+
     title,
     description,
     minimumPrice,
     deliveryPrice,
-    primaryColor,
-    secondaryColor,
     isWithStock,
     isWithMigvan,
     email,
@@ -65,8 +73,16 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     footerDescription1,
     footerDescription2,
     footerDescription3,
+    primaryColor,
+    secondaryColor,
+    logoFile,
+ 
+
+ 
+
     oneSignalApi,
     oneSignalKey,
+    smsCenter,
     smsApi,
     smsToken,
     smsCenterToken,
@@ -74,8 +90,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     masof,
     paymentKey,
     passp,
-    domain,
-    logoFile,
+    domain
   } = useConfig()
 
 
@@ -103,7 +118,6 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       base64: logoBase64,
       fileName:`logo.${splited}`
     })
-    console.log('logo',logo)
     const files = await ConfigService.createFiles({
       folderPath: res.folderPath,
       //ERP API
@@ -111,19 +125,24 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       api,
       username,
       password,
-      host,
-      usernameFtp,
-      passwordFtp,
       db,
+
+      // config api
       imageState,
+      ftpHost,
+      ftpUsername,
+      ftpPassword,
+      categoryState,
+      categoryLvl1,
+      categoryLvl2,
+      categoryLvl3,
+      testUser,
 
       //CONFIGURATION
       title,
       description,
       minimumPrice,
       deliveryPrice,
-      primaryColor,
-      secondaryColor,
       isWithStock,
       isWithMigvan,
       email,
@@ -133,10 +152,13 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       footerDescription1,
       footerDescription2,
       footerDescription3,
+      primaryColor,
+      secondaryColor,
 
       //INTEGRATION
       oneSignalApi,
       oneSignalKey,
+      smsCenter,
       smsApi,
       smsToken,
       smsCenterToken,
@@ -144,7 +166,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       masof,
       paymentKey,
       passp,
-      domain,
+      domain
     })
     console.log('files',files)
   }
@@ -178,7 +200,8 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     const handleOutput = (event: any, data: any) => {
       setLoading(true)
       if (data.type === 'stdout' || data.type === 'stderr') {
-        handler(data.data); 
+        const stringData = String(data.data);
+        setLogCron(prev => [...prev, stringData]); 
       } else if (data.type === 'process_end') {
         setLoading(false); 
       }
@@ -193,7 +216,8 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     setLogModal,
     setLogTitle,
     deployConfig,
-    executeCron
+    executeCron,
+    setLogCronModal
   };
 
   return (
@@ -217,6 +241,24 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
                   )}
                 </DialogContent>
               </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Backdrop>
+      <Backdrop open={logCronModal} onClick={() => setLogCronModal(false)} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '50px' }}>
+          <Typography sx={{ color: 'white', fontWeight: 900, textAlign:'center'}} variant='h5'>
+              {logTitle}
+          </Typography>
+          <Box sx={{width:'100%', margin:'0 auto'}}>
+            <Box sx={{backgroundColor:'white', borderRadius:'5px', color:"black", height:'200px', overflow:'auto', width:'700px'}}>
+              <DialogContent>
+                {logCron && logCron?.map((item) => 
+                  <Typography gutterBottom>
+                    {item}
+                  </Typography>
+                )}
+              </DialogContent>
             </Box>
           </Box>
         </Box>
