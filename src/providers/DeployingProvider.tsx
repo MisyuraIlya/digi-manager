@@ -9,11 +9,13 @@ import { useConfig } from '../store/config.store';
 const ipcRenderer = (window as any).ipcRenderer;
 
 interface ModalContextType {
+  loading: boolean
   dataLog: string[]
   setDataLog: (data: []) => void 
   setLogModal: (value: boolean) => void
   setLogTitle: (value: string) => void
   deployConfig: () => void
+  executeCron: () => void
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -36,6 +38,8 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
   const [logTitle, setLogTitle] = useState('')
   const [dataLog, setDataLog] = useState<string[]>([])
   const { setFolderPath } = useProject()
+  const [loading, setLoading] = useState(false)
+
   const {
     erp,
     api,
@@ -99,6 +103,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       base64: logoBase64,
       fileName:`logo.${splited}`
     })
+    console.log('logo',logo)
     const files = await ConfigService.createFiles({
       folderPath: res.folderPath,
       //ERP API
@@ -141,6 +146,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       passp,
       domain,
     })
+    console.log('files',files)
   }
 
   useEffect(() => {
@@ -170,8 +176,9 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const handleOutput = (event: any, data: any) => {
+      setLoading(true)
       if (data.type === 'stdout' || data.type === 'stderr') {
-        handleOnChange(data.data); 
+        handler(data.data); 
       } else if (data.type === 'process_end') {
         setLoading(false); 
       }
@@ -180,11 +187,13 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
   }, []);
 
   const value = {
+    loading,
     dataLog,
     setDataLog,
     setLogModal,
     setLogTitle,
-    deployConfig
+    deployConfig,
+    executeCron
   };
 
   return (

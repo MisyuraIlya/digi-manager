@@ -2,8 +2,8 @@ import { Box, Button, CircularProgress, IconButton, Modal, Tooltip, Typography }
 import React, { FC, useState } from 'react';
 import BlockIcon from '@mui/icons-material/Block';
 import { useWork } from '../../store/work.store';
-import { useCron } from '../../providers/CronProvider';
 import InfoIcon from '@mui/icons-material/Info';
+import { useDeploying } from '../../providers/DeployingProvider';
 
 interface ICron {
     project: IProject
@@ -25,8 +25,7 @@ const style = {
 
 const Cron:FC<ICron> = ({project}) => {
     const { currentProject } = useWork()
-    const {loading, log, executeCron} = useCron()
-    const [open, setOpen] = useState(false)
+    const { executeCron, loading, setLogModal } = useDeploying()
     
     return (
         <>
@@ -42,7 +41,7 @@ const Cron:FC<ICron> = ({project}) => {
                         <CircularProgress/>
                     </Box>
                 }
-                    <IconButton onClick={() => setOpen(true)}>
+                    <IconButton onClick={() => setLogModal(true)}>
                         <InfoIcon/>
                     </IconButton>
             </Box>
@@ -53,18 +52,6 @@ const Cron:FC<ICron> = ({project}) => {
                 </Tooltip>
             }
             </Box> 
-        <Modal
-            open={open}
-            onClose={() => setOpen(false)}
-        >
-            <Box sx={style}>
-                {log?.map((item) => 
-                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {item}
-                    </Typography>
-                )}
-            </Box>
-        </Modal>
         </>
      
     );

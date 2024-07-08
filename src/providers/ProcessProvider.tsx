@@ -59,7 +59,7 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
 
   const checkIsDisabled = () => {
     if(activeStep === 0) {
-      return false //delete afteher done
+      return false 
 
       return lvl1
     }
@@ -168,7 +168,8 @@ const ProcessProvider: FC<ProcessProviderProps> = ({ children }) => {
           setLogTitle('deploy config')
           const response1 = await deployConfig()
           setLogTitle('create github repository')
-          const response2 =await ConfigService.executeBash(folderPath,title)
+          const response2 = await ConfigService.executeBash(folderPath,title)
+          console.log('response2',response2)
           setLogTitle('create project docker containers')
           DockerService.deploy(`${folderPath}/${title}`);
           setCurrentProject(title)

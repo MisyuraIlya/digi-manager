@@ -77,7 +77,7 @@ const DockerService = {
                         const packageJson = JSON.parse(packageJsonData);
                         version = packageJson.version || 'N/A';
                     } catch (error) {
-                        console.warn(`Could not read or parse package.json for ${file.name}:`, error);
+                        console.log(`Could not read or parse package.json for ${file.name}:`, error);
                     }
     
                     return {
@@ -90,7 +90,7 @@ const DockerService = {
     
             event.sender.send('DockerService:getProjects:response', { result: 'success', data: folders, message: '' });
         } catch (error) {
-            console.error('Error reading directory:', error);
+            console.log('Error reading directory:', error);
             event.sender.send('DockerService:getProjects:response', { result: 'error', message: error.message });
         }
     },
@@ -111,38 +111,39 @@ const DockerService = {
     },
 
     async executeCron(event, data) {
+        console.log('[executeCron] start execute cron',)
         exec('docker ps --filter "ancestor=spetsar/backend-template" --format "{{.ID}}"', (error, stdout, stderr) => {
             if (error) {
-                console.error(`exec error: ${error}`);
+                console.error(`[executeCron] exec error: ${error}`);
                 event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: error.message });
                 return;
             }
     
             if (stderr) {
-                console.error('[STDERR]', stderr);
+                console.log('[executeCron][STDERR]', stderr);
                 event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: stderr });
                 return;
             }
     
             const containerId = stdout.trim();
             const command = `docker exec ${containerId} php bin/console CronManager`;
-    
+            console.log('[executeCron] trying command:'+ command)
             const childProcess = exec(command);
     
             childProcess.stdout.on('data', (stdoutData) => {
                 const trimmedData = stdoutData.toString().trim();
-                console.log('[STDOUT]', trimmedData);
+                console.log('[executeCron][STDOUT]', trimmedData);
                 event.sender.send('DockerService:executeCron:output', { type: 'stdout', data: trimmedData });
             });
     
             childProcess.stderr.on('data', (stderrData) => {
                 const trimmedData = stderrData.toString().trim();
-                console.error('[STDERR]', trimmedData);
+                console.log('[executeCron][STDERR]', trimmedData);
                 event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: trimmedData });
             });
     
             childProcess.on('close', (code) => {
-                console.log(`Child process exited with code ${code}`);
+                console.log(`[executeCron] Child process exited with code ${code}`);
                 event.sender.send('DockerService:executeCron:output', { type: 'process_end', data: `Child process exited with code ${code}` });
             });
         });

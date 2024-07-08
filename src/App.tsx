@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom'
 import createCache from "@emotion/cache"
 import theme from './styles/mui'
 import RouterApp from './RouterApp';
-import { CronProvider } from './providers/CronProvider';
 import { CheckerProvider } from './providers/DockerCheckProvider';
 import { ProcessProvider } from './providers/ProcessProvider';
 import { DeployingProvider } from './providers/DeployingProvider';
@@ -22,9 +21,7 @@ function App() {
           <DeployingProvider>
             <ProcessProvider>
               <CheckerProvider>
-                <CronProvider>
-                  <RouterApp />
-                </CronProvider>
+                <RouterApp />
               </CheckerProvider>
             </ProcessProvider>
           </DeployingProvider>

@@ -195,6 +195,13 @@ function copyFileName(destinationFolderr,sourcee) {
         console.error('Error copying file:', err);
       } else {
         console.log(`${source} was copied to ${destination}`);
+        fs.chmod(destination, '755', (chmodErr) => {
+          if (chmodErr) {
+            console.error('Error setting execute permissions:', chmodErr);
+          } else {
+            console.log('Execute permissions set for', destination);
+          }
+        });
       }
     });
 }
@@ -309,12 +316,12 @@ const ConfigService = {
         const json = data;
         const folder = json.folderPath;
         const projectTitle = json.projectTitle;
-        const scriptPath = 'setup.sh'; // Only the script name since cwd will change to the folder
+        const scriptPath = 'setup.sh';
     
         console.log('scriptPath', `${folder}/${scriptPath}`);
         console.log('-------', `sh "${scriptPath}" "${projectTitle}"`, '--------');
     
-        exec(`sh "${scriptPath}" "${projectTitle}"`, { cwd: folder }, (error, stdout, stderr) => {
+        exec(`bash "${scriptPath}" "${projectTitle}"`, { cwd: folder }, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error executing script: ${error}`);
                 event.sender.send('ConfigService:executeBash:response', {
@@ -324,12 +331,10 @@ const ConfigService = {
                 return;
             }
     
-            // Log stdout and stderr for debugging
             console.log(`stdout: ${stdout}`);
             console.error(`stderr: ${stderr}`);
     
-            // Determine if the script execution was successful
-            const isCreated = true; // Update this logic based on your actual conditions
+            const isCreated = true; 
     
             if (isCreated) {
                 event.sender.send('ConfigService:executeBash:response', {
