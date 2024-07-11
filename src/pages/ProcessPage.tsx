@@ -6,7 +6,7 @@ import Process from '../components/Process';
 const ProcessPage = () => {
     const {activeStep, setActiveStep, checkIsDisabled, handleNext, steps, handleWhatNeed} = useProcess()
     return (
-        <Box>
+        <Box sx={{padding:'10px 40px'}}>
             <Stepper activeStep={activeStep}>
             {steps.map((label, index) => (
                 <Step key={index} >

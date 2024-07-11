@@ -29,31 +29,46 @@ function createJsonFile(folderPath, json) {
             "api":  "${json?.api}",
             "username": "${json?.username}",
             "password": "${json?.password}",
-            "host": "${json?.host}",
-            "usernameFtp": "${json?.usernameFtp}",
-            "passwordFtp": "${json?.passwordFtp}",
             "db": "${json?.db}",
+
             "imageState": "${json?.imageState}",
+            "ftpHost": "${json?.ftpHost}",
+            "ftpUsername": "${json?.ftpUsername}",
+            "ftpPassword": "${json?.ftpPassword}",
+            "categoryState": "${json?.categoryState}",
+            "categoryLvl1": "${json?.categoryLvl1}",
+            "categoryLvl2": "${json?.categoryLvl2}",
+            "categoryLvl3": "${json?.categoryLvl3}",
+            "testUser": "${json?.testUser}",
+
             "title": "${json?.title}",
-            "isWithStock": "${json?.isWithStock}",
-            "isWithMigvan": "${json?.isWithMigvan}",
-            "oneSignalApi": "${json?.oneSignalApi}",
-            "smsApi": "${json?.smsApi}",
-            "smsToken": "${json?.smsToken}",
-        
-            "oneSignalKey": "${json?.oneSignalKey}",
-            "primaryColor": "${json?.primaryColor}",
-            "secondaryColor": "${json?.secondaryColor}",
             "description": "${json?.description}",
             "minimumPrice": "${json?.minimumPrice}",
             "deliveryPrice": "${json?.deliveryPrice}",
-            "location": "${json?.location}",
+            "isWithStock": "${json?.isWithStock}",
+            "isWithMigvan": "${json?.isWithMigvan}",
             "email": "${json?.email}",
-            "phone": "${json?.phone}" ,
-            "fax": "${json?.fax}" ,
+            "location": "${json?.location}",
+            "phoneSupport": "${json?.phoneSupport}",
+            "fax": "${json?.fax}",
             "footerDescription1": "${json?.footerDescription1}",
             "footerDescription2": "${json?.footerDescription2}",
-            "footerDescription3": "${json?.footerDescription3}"
+            "footerDescription3": "${json?.footerDescription3}",
+            "primaryColor": "${json?.primaryColor}",
+            "secondaryColor": "${json?.secondaryColor}",
+
+
+            "oneSignalApi": "${json?.oneSignalApi}",
+            "oneSignalKey": "${json?.oneSignalKey}",
+            "smsCenter": "${json?.smsCenter}",
+            "smsApi": "${json?.smsApi}",
+            "smsToken": "${json?.smsToken}",
+            "smsCenterToken": "${json?.smsCenterToken}",
+            "paymentSystem": "${json?.paymentSystem}",
+            "masof": "${json?.masof}",
+            "paymentKey": "${json?.paymentKey}",
+            "passp": "${json?.passp}",
+            "domain": "${json?.domain}",
         }
         `;
         fs.writeFile(filePath, globalJs, (err) => {
@@ -72,77 +87,99 @@ function createEnvFile(folderPath, data) {
     return new Promise((resolve, reject) => {
         const filePath = path.join(folderPath, '.env');
         const envContent = `
-        # In all environments, the following files are loaded if they exist,
-        # the latter taking precedence over the former:
-        #
-        #  * .env                contains default values for the environment variables needed by the app
-        #  * .env.local          uncommitted file with local overrides
-        #  * .env.$APP_ENV       committed environment-specific defaults
-        #  * .env.$APP_ENV.local uncommitted environment-specific overrides
-        #
-        # Real environment variables win over .env files.
-        #
-        # DO NOT DEFINE PRODUCTION SECRETS IN THIS FILE NOR IN ANY OTHER COMMITTED FILES.
-        # https://symfony.com/doc/current/configuration/secrets.html
-        #
-        # Run "composer dump-env prod" to compile .env files for production use (requires symfony/flex >=1.2).
-        # https://symfony.com/doc/current/best_practices.html#use-environment-variables-for-infrastructure-configuration
-        
-        ###> symfony/framework-bundle ###
-        APP_ENV=dev
-        APP_SECRET=90459d5cc76b79a85bb30a81236feefa
-        ###< symfony/framework-bundle ###
-        
-        ###> doctrine/doctrine-bundle ###
-        # Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url
-        # IMPORTANT: You MUST configure your server version, either here or in config/packages/doctrine.yaml
-        #
-        # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
-        # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
-        # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
-        DATABASE_URL="mysql://root:secret@localhost:3306/app?serverVersion=15&charset=utf8"
-        ###< doctrine/doctrine-bundle ###
-        
-        ###> nelmio/cors-bundle ###
-        CORS_ALLOW_ORIGIN='^.*$'
-        ###< nelmio/cors-bundle ###
-        
-        ###> lexik/jwt-authentication-bundle ###
-        JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
-        JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-        JWT_PASSPHRASE=701ac75f16f09b77dc7745f8c1ffb1823c1eb85e1ccd8c4f0dd51736e58dbdc3
-        ###< lexik/jwt-authentication-bundle ###
-        
-        # ========= DEPLOY CONFIG (Images Serivce || FTP Service) =========
-        VPS_1_SERVER=3.68.115.205
-        VPS_1_USERNAME=july
-        VPS_1_PASSWORD=lE1wE2sP5i
-        VPS_1_FOLDER=digitrade.com.ua
-        VPS_1_OUTPUT_FOLDER=output
-        DOMAIN_IMAGE=https://foodappeal-b2b.com/src/img/
-        NOTIFICATION_IDENTIFIER=ceremonitea
-        
-        # ========= ERP CONFIG (Online and Cron services)=========
-        # Types: Priority, ...
-        ERP_TYPE=${data.erp}
-        ERP_USERNAME=${data.username}
-        ERP_PASSWORD=${data.password}
-        ERP_URL=${data.api}
-        
-        # ========= SEND ORDER CONFIG =========
-        IS_MUST_DELIVERY_PRICE=true // delete
-        MINIMUM_DELIVERY_PRICE=${data.minimumDelivery}
-        
-        #if client want set discount for client has reached the price
-        IS_MAX_ORDER_DISCOUNT=true // delete
-        MAX_PRICE_FOR_DISCOUNT=750 // delete
-        DISCOUNT_PRECENT_FOR_MAX_PRICE=7 // delete
-         
-        # # ========= CONFIG =========
-        IS_USED_MIGVAN=false
-        IS_ONLINE_PRICE=false
-        IS_ONLINE_STOCK=flase
-        IS_ONLINE_MIGVAN=false
+# In all environments, the following files are loaded if they exist,
+# the latter taking precedence over the former:
+#
+#  * .env                contains default values for the environment variables needed by the app
+#  * .env.local          uncommitted file with local overrides
+#  * .env.$APP_ENV       committed environment-specific defaults
+#  * .env.$APP_ENV.local uncommitted environment-specific overrides
+#
+# Real environment variables win over .env files.
+#
+# DO NOT DEFINE PRODUCTION SECRETS IN THIS FILE NOR IN ANY OTHER COMMITTED FILES.
+# https://symfony.com/doc/current/configuration/secrets.html
+#
+# Run "composer dump-env prod" to compile .env files for production use (requires symfony/flex >=1.2).
+# https://symfony.com/doc/current/best_practices.html#use-environment-variables-for-infrastructure-configuration
+
+###> symfony/framework-bundle ###
+APP_ENV=dev
+APP_SECRET=90459d5cc76b79a85bb30a81236feefa
+###< symfony/framework-bundle ###
+
+###> doctrine/doctrine-bundle ###
+# Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url
+# IMPORTANT: You MUST configure your server version, either here or in config/packages/doctrine.yaml
+#
+# DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
+# DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
+# DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+DATABASE_URL="mysql://root:secret@localhost:3306/app?serverVersion=15&charset=utf8"
+###< doctrine/doctrine-bundle ###
+
+###> nelmio/cors-bundle ###
+CORS_ALLOW_ORIGIN='^.*$'
+###< nelmio/cors-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=701ac75f16f09b77dc7745f8c1ffb1823c1eb85e1ccd8c4f0dd51736e58dbdc3
+###< lexik/jwt-authentication-bundle ###
+
+# ========= DEPLOY CONFIG (Images Serivce || FTP Service) =========
+VPS_1_SERVER=3.68.115.205
+VPS_1_USERNAME=july
+VPS_1_PASSWORD=lE1wE2sP5i
+VPS_1_FOLDER=digitrade.com.ua
+VPS_1_OUTPUT_FOLDER=output
+DOMAIN_IMAGE=https://foodappeal-b2b.com/src/img/
+NOTIFICATION_IDENTIFIER=ceremonitea
+
+# ========= ERP CONFIG (Online and Cron services)=========
+ERP_TYPE=${data.erp}
+ERP_USERNAME=${data.username}
+ERP_PASSWORD=${data.password}
+ERP_URL=${data.api}
+ERP_DB=${data.db}
+
+# ========= IMAGE STATE =========
+IMAGE_STATE=${data.imageState}
+FTP_HOST=${data.ftpHost}
+FTP_USERNAME=${data.ftpUsername}
+FTP_PASSWORD=${data.ftpPassword}
+
+# ========= CATEGORY STATE =========
+CATEGORY_STATE=${data.categoryState}
+CATEGORY_LVL_1=${data.categoryLvl1}
+CATEGORY_LVL_2=${data.categoryLvl2}
+CATEGORY_LVL_3 =${data.categoryLvl3}
+
+# ========= USER =========
+TEST_USER=${data.testUser}
+
+
+# ========= CONFIGURATION =========
+TITLE=${data.title}
+DESCRIPTION=${data.description}
+MINIMUM_PRICE=${data.minimumPrice}
+DELIVERY_PRICE=${data.deliveryPrice}
+IS_WITH_STOCK=${data.isWithStock}
+IS_WITH_MIGVAN=${data.isWithMigvan}
+
+# ========= INTEGRATION =========
+ONE_SIGNAL_API=${data.oneSignalApi}
+ONE_SIGNAL_KEY=${data.oneSignalKey}
+SMS_CENTER=${data.smsCenter}
+SMS_API=${data.smsApi}
+SMS_TOKEN=${data.smsToken}
+SMS_CENTER_TOKEN=${data.smsCenterToken}
+PAYMENT_SYSTEM=${data.paymentSystem}
+MASOF=${data.masof}
+PAYMENT_KEY=${data.paymentKey}
+PASSP=${data.passp}
+DOMAIN=${data.domain}
         `;
         
         fs.writeFile(filePath, envContent, (err) => {
@@ -299,12 +336,12 @@ const ConfigService = {
     async createMeida(event,data){
         const json = data;
         const folder = json.folderPath
-
+        console.log('folder',folder)
         const isCreated = await mediaUploader(folder+'/media' , json.base64 , json.fileName)
         const currentDir = __dirname; // Get the current directory path
         const mediaPath = path.join(currentDir, '../media'); 
-        const copyFolderrr = copyFolder(mediaPath,folder+'/media')
-
+        const copyFolderImage = copyFolder(mediaPath,folder+'/media')
+        console.log('copyFolderImage',copyFolderImage)
         if(isCreated){
             event.sender.send('ConfigService:createMeida:response', {result:"success", folderPath:folder,  message:""});
         } else {
