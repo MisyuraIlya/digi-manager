@@ -115,7 +115,7 @@ APP_SECRET=90459d5cc76b79a85bb30a81236feefa
 # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
-DATABASE_URL="mysql://root:secret@localhost:3306/app?serverVersion=15&charset=utf8"
+DATABASE_URL="mysql://root:secret@mysql8-service:3306/app?serverVersion=15&charset=utf8"
 ###< doctrine/doctrine-bundle ###
 
 ###> nelmio/cors-bundle ###
@@ -169,12 +169,10 @@ IS_WITH_STOCK=${data.isWithStock}
 IS_WITH_MIGVAN=${data.isWithMigvan}
 
 # ========= INTEGRATION =========
-ONE_SIGNAL_API=${data.oneSignalApi}
+ONE_SIGNAL_APP_ID=${data.oneSignalApi}
 ONE_SIGNAL_KEY=${data.oneSignalKey}
 SMS_CENTER=${data.smsCenter}
-SMS_API=${data.smsApi}
 SMS_TOKEN=${data.smsToken}
-SMS_CENTER_TOKEN=${data.smsCenterToken}
 PAYMENT_SYSTEM=${data.paymentSystem}
 MASOF=${data.masof}
 PAYMENT_KEY=${data.paymentKey}
