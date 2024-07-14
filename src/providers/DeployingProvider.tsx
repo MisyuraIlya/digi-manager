@@ -66,6 +66,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     deliveryPrice,
     isWithStock,
     isWithMigvan,
+    isOpenWorld,
     email,
     location,
     phoneSupport,
@@ -90,6 +91,9 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
     masof,
     paymentKey,
     passp,
+    yadKey,
+    successLink,
+    errorLink,
     domain
   } = useConfig()
 
@@ -145,6 +149,7 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       deliveryPrice,
       isWithStock,
       isWithMigvan,
+      isOpenWorld,
       email,
       location,
       phoneSupport,
@@ -166,7 +171,12 @@ const DeployingProvider: FC<DeployingProviderProps> = ({ children }) => {
       masof,
       paymentKey,
       passp,
-      domain
+      yadKey,
+      
+      successLink,
+      errorLink,
+      domain,
+      
     })
     console.log('files',files)
   }

@@ -25,50 +25,21 @@ function createJsonFile(folderPath, json) {
         const filePath = path.join(folderPath, 'global.js');
         const globalJs = `
         global.settings = {
-            "erp": "${json?.erp}",
-            "api":  "${json?.api}",
-            "username": "${json?.username}",
-            "password": "${json?.password}",
-            "db": "${json?.db}",
-
-            "imageState": "${json?.imageState}",
-            "ftpHost": "${json?.ftpHost}",
-            "ftpUsername": "${json?.ftpUsername}",
-            "ftpPassword": "${json?.ftpPassword}",
-            "categoryState": "${json?.categoryState}",
-            "categoryLvl1": "${json?.categoryLvl1}",
-            "categoryLvl2": "${json?.categoryLvl2}",
-            "categoryLvl3": "${json?.categoryLvl3}",
-            "testUser": "${json?.testUser}",
-
-            "title": "${json?.title}",
-            "description": "${json?.description}",
-            "minimumPrice": "${json?.minimumPrice}",
-            "deliveryPrice": "${json?.deliveryPrice}",
-            "isWithStock": "${json?.isWithStock}",
-            "isWithMigvan": "${json?.isWithMigvan}",
-            "email": "${json?.email}",
-            "location": "${json?.location}",
-            "phoneSupport": "${json?.phoneSupport}",
-            "fax": "${json?.fax}",
-            "footerDescription1": "${json?.footerDescription1}",
-            "footerDescription2": "${json?.footerDescription2}",
-            "footerDescription3": "${json?.footerDescription3}",
-            "primaryColor": "${json?.primaryColor}",
-            "secondaryColor": "${json?.secondaryColor}",
-
-
-            "oneSignalApi": "${json?.oneSignalApi}",
-            "oneSignalKey": "${json?.oneSignalKey}",
-            "smsCenter": "${json?.smsCenter}",
-            "smsApi": "${json?.smsApi}",
-            "smsToken": "${json?.smsToken}",
-            "smsCenterToken": "${json?.smsCenterToken}",
-            "paymentSystem": "${json?.paymentSystem}",
-            "masof": "${json?.masof}",
-            "paymentKey": "${json?.paymentKey}",
-            "passp": "${json?.passp}",
-            "domain": "${json?.domain}",
+            title: "${json?.title}",
+            description: "${json?.description},
+            minimumPrice: ${json?.minimumPrice},
+            deliveryPrice: ${json?.deliveryPrice},
+            isWithStock: ${json?.isWithStock},
+            isOpenWorld: ${json?.isOpenWorld},
+            email: "${json?.email}",
+            location: "${json?.location}",
+            phoneSupport: "${json?.phoneSupport}",
+            fax: "${json?.fax}",
+            footerDescription1: "${json?.footerDescription1}",
+            footerDescription2: "${json?.footerDescription2}",
+            footerDescription3: "${json?.footerDescription3}",
+            primaryColor: "${json?.primaryColor}",
+            secondaryColor: "${json?.secondaryColor}",s
         }
         `;
         fs.writeFile(filePath, globalJs, (err) => {
@@ -174,8 +145,10 @@ ONE_SIGNAL_KEY=${data.oneSignalKey}
 SMS_CENTER=${data.smsCenter}
 SMS_TOKEN=${data.smsToken}
 PAYMENT_SYSTEM=${data.paymentSystem}
+SUCCESS_LINK=${data.successLink}
+ERROR_LINK=${data.errorLink}
 MASOF=${data.masof}
-PAYMENT_KEY=${data.paymentKey}
+YAD_KEY=${data.yadKey}
 PASSP=${data.passp}
 DOMAIN=${data.domain}
         `;

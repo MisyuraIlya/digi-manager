@@ -21,7 +21,13 @@ const Integration = () => {
         paymentKey,
         setPaymentKey,
         passp,
-        setPassp
+        setPassp,
+        yadKey,
+        setYadKey,
+        successLink,
+        setSuccessLink,
+        errorLink,
+        setErrorLink,
     } = useConfig()
 
     const handleChange = (
@@ -130,11 +136,42 @@ const Integration = () => {
                                     value={passp} 
                                     onChange={(e) => setPassp(e.target.value)}
                                 />
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="key" 
+                                    variant="standard" 
+                                    value={yadKey} 
+                                    onChange={(e) => setYadKey(e.target.value)}
+                                />
                             </Box>
                         }
                         { paymentSystem  == 'tranzilla' &&
                             <Box>
                                 
+                            </Box>
+                        }
+
+                        {
+                            paymentSystem !== 'none' &&
+
+                            <Box>
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="success link" 
+                                    variant="standard" 
+                                    value={successLink} 
+                                    onChange={(e) => setSuccessLink(e.target.value)}
+                                />
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="error link" 
+                                    variant="standard" 
+                                    value={errorLink} 
+                                    onChange={(e) => setErrorLink(e.target.value)}
+                                />
                             </Box>
                         }
                 </Grid>

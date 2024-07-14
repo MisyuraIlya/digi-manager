@@ -48,6 +48,8 @@ interface useConfigState {
     setIsWithStock:(isWithStock: boolean) => void
     isWithMigvan: boolean,
     setIsWithMigvan:(isWithMigvan: boolean) => void
+    isOpenWorld:boolean
+    setIsOpenWorld:(isOpenWorld: boolean) => void
     email: string
     setEmail:(value: string) => void
     location: string,
@@ -86,6 +88,14 @@ interface useConfigState {
     setPaymentKey:(paymentKey:string) => void
     passp:string,
     setPassp: (passp:string) => void
+    yadKey:string,
+    setYadKey: (yadKey:string) => void
+
+    successLink:string,
+    setSuccessLink: (successLink:string) => void
+    errorLink:string,
+    setErrorLink: (errorLink:string) => void
+
     //===
     //deploy
     domain:string,
@@ -141,6 +151,8 @@ export const useConfig = create<useConfigState>()(
       setIsWithStock:(isWithStock: boolean) => set({isWithStock}),
       isWithMigvan:false,
       setIsWithMigvan:(isWithMigvan: boolean) => set({isWithMigvan}),
+      isOpenWorld:false,
+      setIsOpenWorld:(isOpenWorld: boolean) => set({isOpenWorld}),
       email:"",
       setEmail:(email: string) => set({email}),
       location:'',
@@ -191,6 +203,15 @@ export const useConfig = create<useConfigState>()(
       
       passp:'',
       setPassp: (passp) => set({passp}),
+
+      yadKey:'',
+      setYadKey: (yadKey) => set({yadKey}),
+
+      successLink:'',
+      setSuccessLink: (successLink) => set({successLink}),
+
+      errorLink:'',
+      setErrorLink: (errorLink) => set({errorLink}),
       
       //===
       //Deploy

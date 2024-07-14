@@ -23,6 +23,8 @@ const Configuration = () => {
         setIsWithStock,
         isWithMigvan,
         setIsWithMigvan,
+        isOpenWorld,
+        setIsOpenWorld,
         email,
         setEmail,
         location,
@@ -114,6 +116,21 @@ const Configuration = () => {
                         </ToggleButton>
                         <ToggleButton value="ftp" sx={{ '&.Mui-selected': { backgroundColor: themeColors.primary, color:'white' } }}>
                             WITHOUT MIGVAN
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                        sx={{marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}
+                        color="primary"
+                        value={isOpenWorld}
+                        exclusive
+                        onChange={(e,value) => setIsOpenWorld(value)}
+                        aria-label="Platform"
+                    >
+                        <ToggleButton value="api" sx={{ '&.Mui-selected': { backgroundColor: themeColors.primary, color:'white' } }}>
+                            OPEN TO WORLD
+                        </ToggleButton>
+                        <ToggleButton value="ftp" sx={{ '&.Mui-selected': { backgroundColor: themeColors.primary, color:'white' } }}>
+                            CLOSED TO WORLD
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </Box>
