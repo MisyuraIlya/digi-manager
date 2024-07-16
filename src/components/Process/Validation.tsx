@@ -20,7 +20,7 @@ const Validation = () => {
     const [show, setShow] = useState(false)
     const [endpoints, setEndpoints] = useState<IEndPoint[]>([])
     const {setLvl1} = useProcess()
-
+    
     const handleChange = (value: string) => {
         const find = erps?.find((item) => item.name === value)
         setEndpoints(find?.endpoints as IEndPoint[]); 
@@ -28,6 +28,7 @@ const Validation = () => {
     };
 
     const onSubmit = (data: IValidationForm) => {
+        console.log('data',data)
         setApi(data.api,data.username,data.password,data?.db ?? '')
         if(data.api && data.username && data.password){
             handleCheck(data.api,data.username,data.password)

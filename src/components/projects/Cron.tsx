@@ -4,6 +4,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import { useWork } from '../../store/work.store';
 import InfoIcon from '@mui/icons-material/Info';
 import { useDeploying } from '../../providers/DeployingProvider';
+import { useProject } from '../../store/projects.stroe';
 
 interface ICron {
     project: IProject
@@ -24,7 +25,7 @@ const style = {
 };
 
 const Cron:FC<ICron> = ({project}) => {
-    const { currentProject } = useWork()
+    const { currentProject } = useProject()
     const { executeCron, loading, setLogCronModal } = useDeploying()
     
     return (
