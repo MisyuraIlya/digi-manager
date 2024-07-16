@@ -148,7 +148,14 @@ const Integration = () => {
                         }
                         { paymentSystem  == 'tranzilla' &&
                             <Box>
-                                
+                                <TextField 
+                                    sx={{margin:'10px 0'}}
+                                    fullWidth
+                                    label="masof" 
+                                    variant="standard" 
+                                    value={masof} 
+                                    onChange={(e) => setMasof(e.target.value)}
+                                />
                             </Box>
                         }
 

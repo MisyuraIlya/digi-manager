@@ -39,7 +39,9 @@ function createJsonFile(folderPath, json) {
             footerDescription2: "${json?.footerDescription2}",
             footerDescription3: "${json?.footerDescription3}",
             primaryColor: "${json?.primaryColor}",
-            secondaryColor: "${json?.secondaryColor}",s
+            secondaryColor: "${json?.secondaryColor}",
+            oneSignalKey: "${json?.oneSignalKey}",
+            paymentSystem: "${json?.paymentSystem}"
         }
         `;
         fs.writeFile(filePath, globalJs, (err) => {
