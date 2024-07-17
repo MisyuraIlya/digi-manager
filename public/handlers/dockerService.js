@@ -26,7 +26,7 @@ const DockerService = {
         
         const composeDir = path.resolve(folder);
     
-        const dockerCompose = spawn('docker-compose', ['-f', 'docker-compose.prod.yml', 'up', '--build'], {
+        const dockerCompose = spawn('docker-compose', ['-f', 'docker-compose.dev.yml', 'up', '--build'], {
             cwd: composeDir,
         });
     
@@ -112,7 +112,7 @@ const DockerService = {
 
     async executeCron(event, data) {
         console.log('[executeCron] start execute cron',)
-        exec('docker ps --filter "ancestor=spetsar/backend-template" --format "{{.ID}}"', (error, stdout, stderr) => {
+        exec(`docker ps --format "{{.ID}} {{.Image}}" | grep "php81" | awk '{print $1}'`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`[executeCron] exec error: ${error}`);
                 event.sender.send('DockerService:executeCron:output', { type: 'stderr', data: error.message });

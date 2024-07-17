@@ -127,7 +127,7 @@ FTP_PASSWORD=${data.ftpPassword}
 CATEGORY_STATE=${data.categoryState}
 CATEGORY_LVL_1=${data.categoryLvl1}
 CATEGORY_LVL_2=${data.categoryLvl2}
-CATEGORY_LVL_3 =${data.categoryLvl3}
+CATEGORY_LVL_3=${data.categoryLvl3}
 
 # ========= USER =========
 TEST_USER=${data.testUser}
